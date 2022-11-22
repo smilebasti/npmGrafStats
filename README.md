@@ -10,6 +10,8 @@ It saves following Data:
   - Country
   - Coordinates
   - City
+  
+![npmGrafStats](https://user-images.githubusercontent.com/60941345/203383131-50b7197e-2e58-4bb1-a7e6-d92e15d3430a.png)
 
 This project is a modified clone of  https://github.com/Festeazy/nginxproxymanagerGraf and independent of https://github.com/jc21/nginx-proxy-manager.
 
@@ -26,13 +28,15 @@ To the Original Project following changes were made:
 3) get your GeoLite2-City.mmdb google is your friend upload it somewhere where you'll find it
 4) Start the docker container or docker compose with ajusted settings
 5) Add data source into grafana
-6) Import the dashboard file or download it with the ID:  and set the new data source (Nginx Proxy Manager.json)
+6) Import the dashboard file (or download it with the ID: #coming soon)  and set the new data source (Nginx Proxy Manager.json)
+
 
 ## start docker on the same host where nginx proxy manger runs
 - Set Directory to NPM logs and to the GeoLite2-City.mmdb
 - Set Influx settings
 - Set HOME_IPS to your External/Public IP
   - if multiple external IP Addresses separated them with \| 
+- If you are using InfluxDB v1 set to: smilebasti/npmgrafstats:influxv1
 ```
 docker run --name npmgraf -it -d
 -v /home/docker/nginx-proxy-manager/data/logs:/logs \
@@ -83,13 +87,11 @@ services:
 - GEOIPUPDATE_FREQUENCY - The number of hours between geoipupdate runs. If this is not set or is set to 0, geoipupdate will run once and exit.
 
 ## Grafana world map
-Import nginxproxymanager.json file to grafana or use the Grafana Dashboard-ID:
+Import nginxproxymanager.json file to grafana (or use the Grafana Dashboard-ID: #coming soon)
 
 
 Obviously I'd appreciate help or any feedback :) 
 Hope you enjoy
-
-How it looks in the end:
 
 
 ## Dev info/changes made to original
