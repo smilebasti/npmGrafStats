@@ -1,7 +1,7 @@
 # npmGrafStats
 NginxProxyManager Grafana Statistic.
 
-This project analyzes the logs of the Nginx Proxy Manager and exports it to InfluxDB.
+This project analyzes the logs of the Nginx Proxy Manager and exports it to InfluxDB to be used in a Grafana Dashboard.
 It saves following Data:
 - source IP
 - target IP in your home network set in NPM
