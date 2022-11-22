@@ -1,6 +1,8 @@
 # npmGrafStats
 NginxProxyManager Grafana Statistic.
 
+## This Branch is using InfluxDB v1!
+
 This project analyzes the logs of the Nginx Proxy Manager and exports it to InfluxDB to be used in a Grafana Dashboard.
 It saves following Data:
 - source IP
