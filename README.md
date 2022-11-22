@@ -67,8 +67,20 @@ services:
 Use this Docker Compose file to automaticly update the GeoLite2-City.mmdb
 Set your ID and Key!
 ```
-Still coming
+version: '3'
+services:
+  geoipupdate:
+    image: maxmindinc/geoipupdate
+    environment:
+      - GEOIPUPDATE_ACCOUNT_ID=your Account ID
+      - GEOIPUPDATE_LICENSE_KEY=your Key
+      - GEOIPUPDATE_EDITION_IDS=GeoIP2-City
+      - GEOIPUPDATE_FREQUENCY=24
+    volumes:
+      - <database directory>:/usr/share/GeoIP
 ```
+- GEOIPUPDATE_EDITION_IDS - List of space-separated database edition IDs. Edition IDs may consist of letters, digits, and dashes. For example, GeoIP2-City would download the GeoIP2 City database (GeoIP2-City)
+- GEOIPUPDATE_FREQUENCY - The number of hours between geoipupdate runs. If this is not set or is set to 0, geoipupdate will run once and exit.
 
 ## Grafana world map
 Import nginxproxymanager.json file to grafana or use the Grafana Dashboard-ID:
