@@ -22,13 +22,14 @@ To the Original Project following changes were made:
 - the targeted internal ip is loged
 
 ## required things for the installation
+If you are using InfluxDB v1 see Branch: smilebasti/npmgrafstats:influxv1
 
 1) create influxdb nginxproxymanagergraf
 2) Create username and password for nginxproxymanagergraf  
 3) get your GeoLite2-City.mmdb google is your friend upload it somewhere where you'll find it
 4) Start the docker container or docker compose with ajusted settings
-5) Add data source into grafana
-6) Import the dashboard file (or download it with the ID: #coming soon)  and set the new data source (Nginx Proxy Manager.json)
+6) Add data source into grafana
+7) Import the dashboard file (or download it with the ID: #coming soon)  and set the new data source (Nginx Proxy Manager.json)
 
 
 ## start docker on the same host where nginx proxy manger runs
@@ -36,7 +37,6 @@ To the Original Project following changes were made:
 - Set Influx settings
 - Set HOME_IPS to your External/Public IP
   - if multiple external IP Addresses separated them with \| 
-- If you are using InfluxDB v1 set to: smilebasti/npmgrafstats:influxv1
 ```
 docker run --name npmgraf -it -d
 -v /home/docker/nginx-proxy-manager/data/logs:/logs \
@@ -101,7 +101,8 @@ Hope you enjoy
 - Did NPM change the log format? -> to access.log
 - exclude external Ip
 - add apk grep for --line-buffered as not included in bash in busybox -> overflow -> process stopped
+- upgrade to influx 2 - see project evijana2/nginxproxmanagerGraf on github
 
 ### Todo list
 - use logtime and not hosttime to save the stats
-- upgrade to influx 2 - see project evijana2/nginxproxmanagerGraf on github
+
