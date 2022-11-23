@@ -49,14 +49,14 @@ docker run --name npmgraf -it -d
 -e INFLUX_DB=nginxproxymanagergraf \
 -e INFLUX_HOST=192.168.0.189 \
 -e INFLUX_PORT=8086 \
-smilebasti/npmgrafstats
+smilebasti/npmgrafstats:influxv1
 ```
 ### Docker Compose file
 ```
 version: '3'
 services:
   npmgraf:
-    image: smilebasti/npmgrafstats
+    image: smilebasti/npmgrafstats:influxv1
     environment:
       - HOME_IPS=extrenal IP 
       - INFLUX_USER=admin 
@@ -106,4 +106,3 @@ Hope you enjoy
 
 ### Todo list
 - use logtime and not hosttime to save the stats
-- upgrade to influx 2 - see project evijana2/nginxproxmanagerGraf on github
