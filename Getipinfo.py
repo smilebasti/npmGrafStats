@@ -9,11 +9,8 @@ print (measurement_name) #prints Reverse Connections
 # argv1 = outsideip, agrv2 = Domain, argv3 length, argv4 tragetip
 print ('Ip: ', sys.argv[1])
 
-# Hier wird dazwischen noch die Ziel IP-Adresse aufgelistet mit \n getrennt # geändert in sendips zu outside und Target
-
 import geoip2.database
 import socket 
-
 
 # IP gets infos from the DB
 reader = geoip2.database.Reader('/GeoLite2-City.mmdb')
@@ -31,7 +28,7 @@ Domain = str(sys.argv[2])
 duration = int(sys.argv[3])
 Target = str(sys.argv[4])
 
-# Ausgabe
+# print to log
 print (Country)
 print (State)
 print (City)
@@ -46,10 +43,10 @@ reader.close()
 
 
 import datetime
-from influxdb import InfluxDBClient
+import influxdb_client
+from influxdb_client.client.write_api import SYNCHRONOUS
 
 ## get env vars and use
-
 import os
 # influx configuration - edit these
 
@@ -59,48 +56,47 @@ ifuser = os.getenv('INFLUX_USER')
 ifpass = os.getenv('INFLUX_PW')
 ifdb   = os.getenv('INFLUX_DB')
 ifhost = os.getenv('INFLUX_HOST')
-ifport = os.getenv('INFLUX_PORT')
+ifbucket = os.getenv('INFLUX_BUCKET')
+iforg    = os.getenv('INFLUX_ORG')
+iftoken  = os.getenv('INFLUX_TOKEN')
 
 
 print ('****************** end *******************')
 # take a timestamp for this measurement
 time = datetime.datetime.utcnow()
 
-# format the data as a single measurement for influx
-body = [
-    {
-        "measurement": measurement_name,
-        "time": time,
-        "tags": {
-            "key": ISO,
-            "latitude": Lat,
-            "longitude": Long,
-            "Domain": Domain,
-            "City": City,
-            "State": State,
-            "name": Country,
-            "IP": IP,
-            "Target": Target
-            },
-        "fields": {
-            "Domain": Domain,
-            "latitude": Lat,
-            "longitude": Long,
-            "State": State,
-            "City": City,
-            "key": ISO,
-            "IP": IP,
-            "Target": Target,
-            "name": Country,
-            "duration": duration,
-            "metric": 1
-        }
-    }
-]
-
-# connect to influx
-ifclient = InfluxDBClient(ifhost,ifport,ifuser,ifpass,ifdb)
+ifclient = influxdb_client.InfluxDBClient(
+    url=ifhost,
+    token=iftoken,
+    org=iforg
+)
 
 # write the measurement
-ifclient.write_points(body)
+write_api = ifclient.write_api(write_options=SYNCHRONOUS)
+
+point = influxdb_client.Point(measurement_name)
+point.tag("key", ISO)
+point.tag("Latitude", Lat)
+point.tag("Longitude", Long)
+point.tag("Domain", Domain)
+point.tag("City", City)
+point.tag("State", State)
+point.tag("Name", Country)
+point.tag("IP", IP),
+point.tag("Target", Target)
+
+point.field("Domain", Domain)
+point.field("Latitude", Lat)
+point.field("Longitude", Long)
+point.field("State", State)
+point.field("City", City)
+point.field("key", ISO)
+point.field("IP", IP)
+point.field("Target", Target)
+point.field("Name", Country)
+point.field("duration", duration)
+point.field("metric", 1)
+
+write_api.write(bucket=ifbucket, org=iforg, record=point)
+
 
