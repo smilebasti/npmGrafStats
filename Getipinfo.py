@@ -51,10 +51,6 @@ import os
 # influx configuration - edit these
 
 npmhome = "/root/.config/NPMGRAF"
-npmhome = os.getenv('NPMGRAF_HOME')
-ifuser = os.getenv('INFLUX_USER')
-ifpass = os.getenv('INFLUX_PW')
-ifdb   = os.getenv('INFLUX_DB')
 ifhost = os.getenv('INFLUX_HOST')
 ifbucket = os.getenv('INFLUX_BUCKET')
 iforg    = os.getenv('INFLUX_ORG')
@@ -98,5 +94,3 @@ point.field("duration", duration)
 point.field("metric", 1)
 
 write_api.write(bucket=ifbucket, org=iforg, record=point)
-
-
