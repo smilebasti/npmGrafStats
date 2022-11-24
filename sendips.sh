@@ -1,8 +1,4 @@
-#!/bin/sh
-
-#Prüfen ob hohe proxy_host nummern auch dabei sind
-# -> NginxProxyManager/Nginx changed log from proxy_host to proxy-host# access oder error log
-#   {,} anzahl 1 bis drei zeichen. [-] zeichen von bis 0 bis 9. \ für sonderzeichen. () gruppierung als ein ausdruck. | or
+#!/bin/bash
 
 # gets all lines including an IP. 
 #Grep finds the the IP addresses without the HOME_IPS in the access.log
@@ -10,7 +6,7 @@ tail -f /logs/proxy-host*access.log | grep --line-buffered -E "([0-9]{1,3}[\.]){
 
 do
   #Domain or subdomain gets found. only de/net/org/com
-  domain=`echo ${line:0:80} | grep -m 1 -o -E "([a-z0-9\-]*\.){1,3}?[a-z0-9\-]*\.(de|net|org|com)"`
+  targetdomain=`echo $line | grep -m 1 -o -E "([a-z0-9\-]*\.){1,3}?[a-z0-9\-]*\.(de|net|org|com)" | head -1`
 
   #Get the first ip found = outsideip
   # head -1 because grep finds two (sometimes three) and only the first is needed
@@ -23,18 +19,35 @@ do
   # What does length say? 
   # save from 14 postion after space and only the first digits found to length 
   length=`echo $line | awk -F ' ' '{print$14}' | grep -m 1 -o '[[:digit:]]*'`
+
+  #if [ -z "$domain" ] 
+  #then
+  #domain="No Domain called"
+  #else
+  #domain = `echo $domain | head -1`
+  #fi
   
   #Idea of getting device
   #device=`echo $line | grep -e ""'('*')'""`
-  
+
+  #check if domain is empty but if found use the first found
+  #if [ -z "$domain" ] 
+  #then
+  #  targetdomain="No Domain called"
+  #else
+  #  targetdomain=`echo $domain | grep -m 1 -o -E "([a-z0-9\-]*\.){1,3}?[a-z0-9\-]*\.(de|net|org|com)" | head -1`
+  #fi
+
   # prints to log what is transferd to Getipinfo.py
   #echo $length #argv 3
   #echo $outsideip # argv 1
   #echo $targetip # argv 4
-  #echo $domain # argv 2
+  #echo $domain
+  #echo $targetdomain # argv 2
 
 
-  python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$domain" "$length" "$targetip"
+  python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip"
 
 done
 reboot
+
