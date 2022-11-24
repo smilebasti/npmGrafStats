@@ -35,7 +35,7 @@ If you are using InfluxDB v1 see Branch: smilebasti/npmgrafstats:influxv1
 ## start docker on the same host where nginx proxy manger runs
 - Set Directory to NPM logs and to the GeoLite2-City.mmdb
 - Set Influx settings
-- Set HOME_IPS to your External/Public IP
+- Set HOME_IPS to your External/Public IP + the Port
   - if multiple external IP Addresses separated them with \| 
 ```
 docker run --name npmgraf -it -d
@@ -45,8 +45,7 @@ docker run --name npmgraf -it -d
 -e INFLUX_USER=admin \
 -e INFLUX_PW=password \
 -e INFLUX_DB=nginxproxymanagergraf \
--e INFLUX_HOST=192.168.0.189 \
--e INFLUX_PORT=8086 \
+-e INFLUX_HOST=192.168.0.189:8086 \
 smilebasti/npmgrafstats
 ```
 ### Docker Compose file
@@ -60,8 +59,7 @@ services:
       - INFLUX_USER=admin 
       - INFLUX_PW=password
       - INFLUX_DB=nginxproxymanagergraf
-      - INFLUX_HOST=192.168.0.189
-      - INFLUX_PORT=8086
+      - INFLUX_HOST=192.168.0.189:8086
     volumes:
       - /home/docker/nginx-proxy-manager/data/logs:/logs
       - /home/docker/nginx-proxy-manager/GeoLite2-City.mmdb:/GeoLite2-City.mmdb
@@ -87,7 +85,7 @@ services:
 - GEOIPUPDATE_FREQUENCY - The number of hours between geoipupdate runs. If this is not set or is set to 0, geoipupdate will run once and exit.
 
 ## Grafana world map
-Import nginxproxymanager.json file to grafana (or use the Grafana Dashboard-ID: #coming soon)
+Import Npm-Map-Dashboard-influxv2.json file to grafana (or use the Grafana Dashboard-ID: #coming soon)
 
 
 Obviously I'd appreciate help or any feedback :) 
