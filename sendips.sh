@@ -10,7 +10,7 @@ tail -f /logs/proxy-host*access.log | grep --line-buffered -E "([0-9]{1,3}[\.]){
 
 do
   #Domain or subdomain gets found. only de/net/org/com
-  domain=`echo ${line:0:80} | grep -m 1 -o -E "([a-z0-9\-]*\.){1,3}?[a-z0-9\-]*\.(de|net|org|com)"`
+  domain=`echo ${line:0:80} | grep -m 1 -o -E "([a-z0-9\-]*\.){1,3}?[a-z0-9\-]*\.[A-Za-z]{2,6}" | head -1`
 
   #Get the first ip found = outsideip
   # head -1 because grep finds two (sometimes three) and only the first is needed
