@@ -21,7 +21,7 @@ If you are using InfluxDB v1 see Branch: https://github.com/smilebasti/npmGrafSt
 ## required things for the installation
 
 1) create influx Organisation npmgrafstats
-2) Create a Bucket and a Tocken for npmgrafstats
+2) Create a Bucket and a API-Tocken for npmgrafstats
 3) Set HOME_IPS to your External/Public IP (if multiple external IP Addresses separated them with \| )
 4) get your GeoLite2-City.mmdb from the geoliteupdate container (docker-compose file below)
 5) Start the docker container or docker compose with ajusted settings
@@ -76,7 +76,8 @@ services:
 ```
 
 ## Grafana world map
-Import Npm-Map-Dashboard-influxv2.json file to grafana (or use the Grafana Dashboard-ID: #coming soon)
+Import Npm-Map-Dashboard-influxv2.json file to grafana (or use the Grafana Dashboard-ID: #18360) 
+https://grafana.com/grafana/dashboards/18360-npm-map-influx-v2/
 
 Obviously I'd appreciate help or any feedback :) 
 Hope you enjoy
@@ -100,4 +101,3 @@ To the Original Project following changes were made:
 
 ### Todo list
 - use logtime and not hosttime to save the stats
-- add more top level domains if needed. now only .de/.net/.org/.com
