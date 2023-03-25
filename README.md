@@ -89,7 +89,8 @@ services:
 - GEOIPUPDATE_FREQUENCY - The number of hours between geoipupdate runs. If this is not set or is set to 0, geoipupdate will run once and exit.
 
 ## Grafana world map
-Import nginxproxymanager.json file to grafana (or use the Grafana Dashboard-ID: #coming soon)
+Import nginxproxymanager.json file to grafana (or use the Grafana Dashboard-ID: #18361)
+https://grafana.com/grafana/dashboards/18361-npm-map-influx-v1/
 
 
 Obviously I'd appreciate help or any feedback :) 
