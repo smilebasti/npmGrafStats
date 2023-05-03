@@ -23,21 +23,24 @@ If you are using InfluxDB v1 see Branch: https://github.com/smilebasti/npmGrafSt
 1) create influx Organisation npmgrafstats
 2) Create a Bucket and a API-Tocken for npmgrafstats
 3) Set HOME_IPS to your External/Public IP (if multiple external IP Addresses separated them with \| )
-4) get your GeoLite2-City.mmdb from the geoliteupdate container (docker-compose file below)
+4) get your GeoLite2-City.mmdb from the geoliteupdate container (docker-compose file below) or download it to the working directory manually
 5) Start the docker container or docker compose with ajusted settings
 6) Add data source into grafana
 7) Import the dashboard file or download it with the ID:  and set the new data source (Nginx Proxy Manager.json)
 
 ## start docker on the same host where nginx proxy manger runs
+- Follwoing the working directory is /home/docker !
+- NPM's docker-compose file and data directory are under /home/docker/nginx-proxy-manager !
+- GeoLite2-City.mmdb is in /home/data
 ### Docker command
 ```
 docker run --name npmgraf -it -d
 -v /home/docker/nginx-proxy-manager/data/logs:/logs \
--v /home/docker/nginx-proxy-manager/GeoLite2-City.mmdb:/GeoLite2-City.mmdb \
+-v /home/docker/GeoLite2-City.mmdb:/GeoLite2-City.mmdb \
 -e HOME_IPS=external IP \
 -e INFLUX_HOST=192.168.0.189:8086 \
--e INFLUX_BUCKET=npmgrafstats \
--e INFLUX_ORG=npmgrafstats \
+-e INFLUX_BUCKET=<replace> \
+-e INFLUX_ORG=<replace> \
 -e INFLUX_TOKEN=<replace> \
 smilebasti/npmgrafstats
 ```
@@ -50,8 +53,8 @@ services:
     environment:
       - HOME_IPS=extrenal IP
       - INFLUX_HOST=192.168.0.189:8086
-      - INFLUX_BUCKET=npmgrafstats
-      - INFLUX_ORG=npmgrafstats
+      - INFLUX_BUCKET=<replace>
+      - INFLUX_ORG=<replace>
       - INFLUX_TOKEN=<replace>
     volumes:
       - /home/docker/nginx-proxy-manager/data/logs:/logs
@@ -69,7 +72,7 @@ services:
     environment:
       - GEOIPUPDATE_ACCOUNT_ID=<replace>
       - GEOIPUPDATE_LICENSE_KEY=<replace>
-      - GEOIPUPDATE_EDITION_IDS=GeoIP2-City
+      - GEOIPUPDATE_EDITION_IDS=GeoLite2-City
       - GEOIPUPDATE_FREQUENCY=24
     volumes:
       - /home/docker:/usr/share/GeoIP
