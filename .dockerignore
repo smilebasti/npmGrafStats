@@ -1,5 +1,5 @@
 #Ignoring git and cache folders
-.gitlab-ci.yml
+*.yml
 
 #Ignoring all the markdown and class files
 *.md

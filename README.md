@@ -3,7 +3,7 @@ NginxProxyManager Grafana Statistic.
 
 This project analyzes the logs of the Nginx Proxy Manager and exports it to InfluxDB to be used in a Grafana Dashboard.
 
-It saves following Data:
+It saves following Data from the Revers-Proxy and Redirection Logs:
 - source IP
 - target IP in your home network set in NPM
 - the targeted domain
@@ -14,51 +14,58 @@ It saves following Data:
 
 ![npmGrafStats](https://user-images.githubusercontent.com/60941345/203383131-50b7197e-2e58-4bb1-a7e6-d92e15d3430a.png)
 
-This project is a modified clone of  https://github.com/Festeazy/nginxproxymanagerGraf and independent of https://github.com/jc21/nginx-proxy-manager.
+This project is a modified clone of  https://github.com/Festeazy/nginxproxymanagerGraf and independent of https://github.com/jc21/nginx-proxy-manager. Changes to the original project can be found in the changelog.md file.
 
-If you are using InfluxDB v1 see Branch: https://github.com/smilebasti/npmGrafStats/tree/influx-v1
 
+Obviously I'd appreciate help or any feedback :) 
+Hope you enjoy
+
+# Installation
+### If you are using InfluxDB v1 see Branch: https://github.com/smilebasti/npmGrafStats/tree/influx-v1. This Branch is not going to be developed in the future!
 ## required things for the installation
 
 1) create an influx Organisation called npmgrafstats
-2) Create a Bucket called npmgrafstatsand a API-Tocken for npmgrafstats
-3) Set HOME_IPS to your External/Public IP (if multiple external IP Addresses separated them with \| )
-4) get your GeoLite2-City.mmdb from the geoliteupdate container (docker-compose file below) or download it to the working directory manually
+2) Create a Bucket called npmgrafstats and a API-Token for npmgrafstats with write access
+3) Set HOME_IPS to your External/Public IP
+4) get your GeoLite2-City.mmdb from the geoliteupdate container (docker-compose file below) or download it to the /home/docker/geolite directory manually
 5) Start the docker container or docker compose with ajusted settings
-6) Add data source into grafana
-7) Import the dashboard file or download it with the ID:  and set the new data source (Nginx Proxy Manager.json)
+6) Add InfluxDB Bucket npmgrafstats as data source into grafana
+7) Download the dashboard file (NPM Map Dashboard v2.1.1.json) or import it with the ID: 18826 and set the new data source
 
 ## start docker on the same host where nginx proxy manger runs
-- Follwoing the working directory is /home/docker !
+- In the following the working directory is /home/docker !
 - NPM's docker-compose file and data directory are under /home/docker/nginx-proxy-manager !
-- GeoLite2-City.mmdb is in /home/data
+- GeoLite2-City.mmdb is in /home/docker/geolite
 ### Docker command
 ```
 docker run --name npmgraf -it -d
 -v /home/docker/nginx-proxy-manager/data/logs:/logs \
--v /home/docker/GeoLite2-City.mmdb:/GeoLite2-City.mmdb \
--e HOME_IPS=external IP \
--e INFLUX_HOST=192.168.0.189:8086 \
+-v /home/docker/geolite:/geolite \
+-e HOME_IPS=<replace with external IP> \
+-e INFLUX_HOST=<replace>:8086 \  # use host IP
 -e INFLUX_BUCKET=npmgrafstats \
 -e INFLUX_ORG=npmgrafstats \
 -e INFLUX_TOKEN=<replace> \
+-e REDIRECTION_LOGS=<set> # set to TRUE or FALSE
 smilebasti/npmgrafstats
 ```
 ### Docker Compose file
+A complete docker-compose.yml file is availlibale with Npm, npmGrafStats, InfluxDB, GeoLite, Grafana and Portainer.
 ```
 version: '3'
 services:
   npmgraf:
     image: smilebasti/npmgrafstats
     environment:
-      - HOME_IPS=extrenal IP
-      - INFLUX_HOST=192.168.0.189:8086
+      - HOME_IPS=<replace with external IP>
+      - INFLUX_HOST=<replace>:8086  # use host IP
       - INFLUX_BUCKET=npmgrafstats
       - INFLUX_ORG=npmgrafstats
       - INFLUX_TOKEN=<replace>
+      - REDIRECTION_LOGS=<set> # set to TRUE or FALSE
     volumes:
       - /home/docker/nginx-proxy-manager/data/logs:/logs
-      - /home/docker/GeoLite2-City.mmdb:/GeoLite2-City.mmdb
+      - /home/docker/geolite:/geolite
 ```
 
 ## GeoLite2-City.mmdb Auto update
@@ -75,32 +82,12 @@ services:
       - GEOIPUPDATE_EDITION_IDS=GeoLite2-City
       - GEOIPUPDATE_FREQUENCY=24
     volumes:
-      - /home/docker:/usr/share/GeoIP
+      - /home/docker/geolite:/usr/share/GeoIP
 ```
 
 ## Grafana world map
-Import Npm-Map-Dashboard-influxv2.json file to grafana (or use the Grafana Dashboard-ID: #18360) 
-https://grafana.com/grafana/dashboards/18360-npm-map-influx-v2/
+### The ID changed!! accidentally deleted the old one. Sorry.
+Import NPM-Map-Dashboard-v2.1.1.json file to grafana (or use the Grafana Dashboard-ID: #18826) 
+https://grafana.com/grafana/dashboards/18826
 
-Obviously I'd appreciate help or any feedback :) 
-Hope you enjoy
 
-## Dev info/changes made to original
-To the Original Project following changes were made:
-- the new log format and only the proxy-host*-access.log from NPM are used
-- Domains now allow a - in the domain
-- no subdomains or subdomains up to 3 levels extra (sub.sub.sub.domain.tld)
-- the targeted internal ip is loged
-- using influxdb v2
-
-### Detailed
-- args parssed sendips.sh to Getipinfo.py: 1. Outside IP 2. Domain 3. length 4. Target IP
-- These Domain only registered for me : .env.de, config.php.com(.de,.org)
-- Add Domains to Dashboard
-- Did NPM change the log format? -> to access.log
-- exclude external Ip
-- add apk grep for --line-buffered as not included in bash in busybox -> overflow -> process stopped
-- upgrade to influx 2 - see project https://github.com/evijayan2/nginxproxymanagerGraf
-
-### Todo list
-- use logtime and not hosttime to save the stats

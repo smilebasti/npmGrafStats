@@ -27,7 +27,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "9.2.3"
+      "version": "9.3.2"
     },
     {
       "type": "datasource",
@@ -76,6 +76,7 @@
       }
     ]
   },
+  "description": "NginxProxyManager Map with Influx v2.1.1 powered by https://github.com/smilebasti/npmGrafStats",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
@@ -83,6 +84,19 @@
   "links": [],
   "liveNow": false,
   "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 17,
+      "panels": [],
+      "title": "All Accessed",
+      "type": "row"
+    },
     {
       "datasource": {
         "type": "influxdb",
@@ -113,10 +127,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 14,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 11,
       "options": {
@@ -129,12 +143,12 @@
             "lastNotNull"
           ],
           "fields": "",
-          "limit": 33,
+          "limit": 40,
           "values": true
         },
         "showUnfilled": true
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
@@ -152,7 +166,7 @@
           "measurement": "ReverseProxyConnections",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"ReverseProxyConnections\")\r\n  |> group(columns: [\"Domain\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n",
+          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._field == \"Domain\")\r\n  |> group(columns: [\"Domain\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n",
           "refId": "A",
           "resultFormat": "table",
           "select": [
@@ -172,8 +186,21 @@
           "tags": []
         }
       ],
-      "title": "Accessed Domains",
+      "title": "All Accessed Domains",
       "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 15,
+      "panels": [],
+      "title": "Detail overall",
+      "type": "row"
     },
     {
       "datasource": {
@@ -225,7 +252,7 @@
         "h": 8,
         "w": 7,
         "x": 0,
-        "y": 11
+        "y": 16
       },
       "id": 7,
       "options": {
@@ -246,7 +273,7 @@
           }
         ]
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
@@ -264,7 +291,7 @@
           "measurement": "ReverseProxyConnections",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"IP\")  \r\n  |> group(columns: [\"IP\"])\r\n  |> count()\r\n  |> drop(columns: [\"_start\", \"_stop\"])\r\n  |> yield(name: \"alias\")\r\n",
+          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_field\"] == \"IP\")  \r\n  |> group(columns: [\"IP\"])\r\n  |> count()\r\n  |> drop(columns: [\"_start\", \"_stop\"])\r\n  |> yield(name: \"alias\")\r\n",
           "refId": "A",
           "resultFormat": "table",
           "select": [
@@ -338,7 +365,7 @@
         "h": 8,
         "w": 5,
         "x": 7,
-        "y": 11
+        "y": 16
       },
       "id": 9,
       "options": {
@@ -355,7 +382,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
@@ -379,7 +406,7 @@
           "measurement": "ReverseProxyConnections",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"IP\")\r\n  \r\n  |> group(columns: [\"_count\"])\r\n\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n  |> count()",
+          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._field == \"IP\")\r\n  \r\n  |> group(columns: [\"_count\"])\r\n\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n  |> count()",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -432,10 +459,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 19,
+        "h": 22,
         "w": 12,
         "x": 12,
-        "y": 11
+        "y": 16
       },
       "id": 5,
       "options": {
@@ -446,12 +473,12 @@
         "reduceOptions": {
           "calcs": [],
           "fields": "/.*/",
-          "limit": 50,
+          "limit": 220,
           "values": true
         },
         "showUnfilled": true
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "alias": "",
@@ -470,7 +497,7 @@
           "measurement": "ReverseProxyConnections",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"Name\")\r\n  \r\n  |> group(columns: [\"Name\"])\r\n\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n  |> count()",
+          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._field == \"Name\")\r\n  \r\n  |> group(columns: [\"Name\"])\r\n\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n  |> count()",
           "refId": "A",
           "resultFormat": "table",
           "select": [
@@ -502,7 +529,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "continuous-RdYlGr"
           },
           "custom": {
             "axisCenteredZero": false,
@@ -510,7 +537,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "bars",
+            "drawStyle": "line",
             "fillOpacity": 21,
             "gradientMode": "none",
             "hideFrom": {
@@ -552,10 +579,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 14,
         "w": 12,
         "x": 0,
-        "y": 19
+        "y": 24
       },
       "id": 4,
       "options": {
@@ -589,7 +616,7 @@
           "measurement": "ReverseProxyConnections",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Domain\")\r\n  |> group(columns: [\"_measurement\", \"_field\", \"_time=1m\"])\r\n  |> aggregateWindow(every: 1m, fn: count, createEmpty: false)\r\n  |> yield(name: \"count\")\r\n\r\n\r\n",
+          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Domain\")\r\n  |> group(columns: [\"_measurement\", \"_field\", \"_time=1m\"])\r\n  |> aggregateWindow(every: 1m, fn: count, createEmpty: false)\r\n  |> yield(name: \"count\")\r\n\r\n\r\n",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -618,6 +645,217 @@
       ],
       "title": "Hits per 1 min",
       "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 38
+      },
+      "id": 21,
+      "panels": [],
+      "title": "Reverse Proxy and Redirection Domains",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "displayName": "${__field.labels.__values}",
+          "mappings": [],
+          "noValue": "No Domain called",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 39
+      },
+      "id": 12,
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 40,
+          "values": true
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "Domain"
+              ],
+              "type": "tag"
+            }
+          ],
+          "measurement": "ReverseProxyConnections",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"Domain\")\r\n  |> group(columns: [\"Domain\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "Domain"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Reverse Proxy Domains",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "description": "If enabeld in settings",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "displayName": "${__field.labels.__values}",
+          "mappings": [],
+          "noValue": "No Redirection called",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 39
+      },
+      "id": 13,
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 40,
+          "values": true
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "Domain"
+              ],
+              "type": "tag"
+            }
+          ],
+          "measurement": "ReverseProxyConnections",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\")\r\n  |> filter(fn: (r) => r._field == \"Domain\")\r\n  |> group(columns: [\"Domain\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "Domain"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Redirection Domains",
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 51
+      },
+      "id": 19,
+      "panels": [],
+      "title": "World Map",
+      "type": "row"
     },
     {
       "datasource": {
@@ -667,7 +905,7 @@
         "h": 21,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 52
       },
       "id": 2,
       "maxDataPoints": 1,
@@ -694,7 +932,7 @@
                   "field": "_value",
                   "fixed": "dark-green"
                 },
-                "opacity": 0.5,
+                "opacity": 0.6,
                 "rotation": {
                   "field": "_value",
                   "fixed": 0,
@@ -741,10 +979,10 @@
           "id": "fit",
           "lat": 0,
           "lon": 0,
-          "zoom": 15
+          "zoom": 14.94
         }
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
@@ -774,7 +1012,7 @@
           "measurement": "ReverseProxyConnections",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) =>  r._field == \"Latitude\" or r._field == \"Longitude\" or r._field == \"IP\")  \r\n  |> group(columns: [\"Longitude\",\"Latitude\",\"IP\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n\r\n",
+          "query": "from(bucket: \"npmgrafstats\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._field == \"IP\")  \r\n  |> group(columns: [\"Longitude\",\"Latitude\",\"IP\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n\r\n",
           "refId": "A",
           "resultFormat": "table",
           "select": [
@@ -834,8 +1072,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Nginx Map v2",
+  "title": "NPM Map Influx v2.1.1",
   "uid": "pvWDTV_MW",
-  "version": 6,
+  "version": 13,
   "weekStart": ""
 }
