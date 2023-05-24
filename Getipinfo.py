@@ -3,17 +3,18 @@
 import sys
 # import geoip2.webservice
 print ('**************** start *********************')
-measurement_name = ("ReverseProxyConnections")
-print (measurement_name) #prints Reverse Connections
+measurement_name = (sys.argv[5]) #f get measurement from argv
+print ('Measurement-name: '+measurement_name) 
 
 # argv1 = outsideip, agrv2 = Domain, argv3 length, argv4 tragetip
-print ('Ip: ', sys.argv[1])
+# print ('Outside-ip: ', sys.argv[1])
 
 import geoip2.database
 import socket 
 
+ 
 # IP gets infos from the DB
-reader = geoip2.database.Reader('/GeoLite2-City.mmdb')
+reader = geoip2.database.Reader('/geolite/GeoLite2-City.mmdb')
 response = reader.city(str(sys.argv[1]))
 
 Lat = response.location.latitude
@@ -56,8 +57,6 @@ ifbucket = os.getenv('INFLUX_BUCKET')
 iforg    = os.getenv('INFLUX_ORG')
 iftoken  = os.getenv('INFLUX_TOKEN')
 
-
-print ('****************** end *******************')
 # take a timestamp for this measurement
 time = datetime.datetime.utcnow()
 
@@ -94,3 +93,5 @@ point.field("duration", duration)
 point.field("metric", 1)
 
 write_api.write(bucket=ifbucket, org=iforg, record=point)
+
+print ('*************** data send ******************')
