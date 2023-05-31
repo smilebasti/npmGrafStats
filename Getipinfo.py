@@ -58,7 +58,37 @@ iforg    = os.getenv('INFLUX_ORG')
 iftoken  = os.getenv('INFLUX_TOKEN')
 
 # take a timestamp for this measurement
-time = datetime.datetime.utcnow()
+oldtime = str(sys.argv[6]) #30/May/2023:14:16:48 +0000 to 2009-11-10T23:00:00.123456Z
+#transform month
+month = oldtime[3:6]
+if month == 'Jan':
+    month = '01'
+elif month =='Feb':
+    month = '02'
+elif month =='Mar':
+    month = '03'
+elif month =='Apr':
+    month = '04'
+elif month =='May':
+    month = '05'
+elif month =='Jun':
+    month = '06'
+elif month =='Jul':
+    month = '07'
+elif month =='Aug':
+    month = '08'
+elif month =='Sep':
+    month = '09'
+elif month =='Oct':
+    month = '10'
+elif month =='Nov':
+    month = '11'
+else:
+    month = '12'
+
+# build new time
+time=oldtime[7:11]+'-'+month+'-'+oldtime[0:2]+'T'+oldtime[12:20]+'.000000Z'
+print('Measurement Time: ', time)
 
 ifclient = influxdb_client.InfluxDBClient(
     url=ifhost,
@@ -91,6 +121,8 @@ point.field("Target", Target)
 point.field("Name", Country)
 point.field("duration", duration)
 point.field("metric", 1)
+
+point.time(time)
 
 write_api.write(bucket=ifbucket, org=iforg, record=point)
 

@@ -21,16 +21,20 @@ do
   then
     echo "Internal IP: $outsideip called for redirection: $targetdomain"
   else  
-    echo "external IP called redirection"    
+    #echo "external IP called redirection"    
 
     # What does length say? 
     # save from 14 postion after space and only the first digits found to length 
     #length=`echo $line | awk -F ' ' '{print$14}' | grep -m 1 -o '[[:digit:]]*'`
 
+    # get time from logs
+    measurementtime=`echo ${line:1:26} `
+    #echo "measurement time: $measurementtime"
+
     #Idea of getting device
     #device=`echo $line | grep -e ""'('*')'""`
 
-    python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "0" "redirect" "Redirections"
+    python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "0" "redirect" "Redirections" "$measurementtime"
 
   fi
 done

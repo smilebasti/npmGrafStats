@@ -55,6 +55,7 @@ services:
 
   influxdb:
     image: influxdb:2.7-alpine
+    restart: unless-stopped
     environment:
       DOCKER_INFLUXDB_INIT_MODE: 'setup'
       DOCKER_INFLUXDB_INIT_USERNAME: '<replace>'
@@ -69,6 +70,7 @@ services:
 
   geoipupdate:
     image: maxmindinc/geoipupdate
+    restart: unless-stopped
     environment:
       GEOIPUPDATE_ACCOUNT_ID: '<replace>'
       GEOIPUPDATE_LICENSE_KEY: '<replace>'
@@ -90,6 +92,7 @@ services:
 
   grafana:
     image: grafana/grafana-oss
+    restart: unless-stopped
     ports:
       - '3000:3000'
     volumes:

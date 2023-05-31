@@ -4,6 +4,12 @@
 - use logtime and not hosttime to save the stats
 - Stop gathering after few days
 
+## v2.2.0
+Removes duplicate logs of the same Connection in case of a restart of NpmGrafStats
+- add time to influx measurement
+- convert [30/May/2023:14:16:48 +0000] to 2009-11-10T23:00:00.123456Z RFC 3339
+  - Timezone is not converted! Stays UTC
+
 ## v2.1.1
 - fix redirection logs
 - added Redirections and ReverseProxy Dashboard to Grafana
