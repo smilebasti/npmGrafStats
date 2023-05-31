@@ -1,5 +1,5 @@
 # npmGrafStats
-NginxProxyManager Grafana Statistic.
+NginxProxyManager Grafana Statistics.
 
 This project analyzes the logs of the Nginx Proxy Manager and exports it to InfluxDB to be used in a Grafana Dashboard.
 
@@ -7,6 +7,7 @@ It saves following Data from the Revers-Proxy and Redirection Logs:
 - source IP
 - target IP in your home network set in NPM
 - the targeted domain
+- the measurement time
 - the Data of the source IP from GeoLite2-City.mmdb
   - Country
   - Coordinates

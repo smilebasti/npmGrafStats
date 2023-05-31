@@ -28,10 +28,14 @@ do
     # save from 14 postion after space and only the first digits found to length 
     length=`echo $line | awk -F ' ' '{print$14}' | grep -m 1 -o '[[:digit:]]*'`
 
+    # get time from logs
+    measurementtime=`echo ${line:1:26} `
+    #echo "measurement time: $measurementtime"
+
     #Idea of getting device
     #device=`echo $line | grep -e ""'('*')'""`
 
-    python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "ReverseProxyConnections"
+    python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "ReverseProxyConnections" "$measurementtime"
 
   fi
 done
