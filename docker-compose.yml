@@ -41,7 +41,7 @@ services:
     restart: unless-stopped
     environment:
       HOME_IPS: 'extrenal IP'
-      REDIRECTION_LOGS: '<set TRUE or FALSE>' # TRUE or FALSE
+      REDIRECTION_LOGS: '<set TRUE or FALSE>' # TRUE or FALSE or ONLY
       INFLUX_HOST: '<replace>:8086' # use host IP
       INFLUX_BUCKET: 'npmgrafstats'
       INFLUX_ORG: 'npmgrafstats'
@@ -49,6 +49,7 @@ services:
     volumes:
       - ./data/logs:/logs
       - ./geolite:/geolite
+      - ./monitoringips.txt:/monitoringips.txt # optional only mount if preexists and a wanted feature
     depends_on:
       - geoipupdate
       - npm
