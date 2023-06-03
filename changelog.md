@@ -1,7 +1,6 @@
 # Changelog
 
 ### Todo list
-- move HOME_IPS to internal domain
 - Stop gathering after few days
 ### Not planned features
 - maybe analys fallback logs
@@ -10,6 +9,7 @@
 - add option REDIRECTION_LOGS='ONLY' for only redirection logs analysis
 - add version to startup logs
 - add an external list of ip's to be excluded for exclusion of monitoring ip's
+- move HOME_IPS to internal domain
 
 ## v2.2.0
 Removes duplicate logs of the same Connection in case of a restart of NpmGrafStats
