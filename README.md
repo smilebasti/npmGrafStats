@@ -28,10 +28,12 @@ Hope you enjoy
 1) create an influx Organisation called npmgrafstats
 2) Create a Bucket called npmgrafstats and a API-Token for npmgrafstats with write access
 3) Set HOME_IPS to your External/Public IP
-4) get your GeoLite2-City.mmdb from the geoliteupdate container (docker-compose file below) or download it to the /home/docker/geolite directory manually
-5) Start the docker container or docker compose with ajusted settings
-6) Add InfluxDB Bucket npmgrafstats as data source into grafana
-7) Download the dashboard file (NPM Map Dashboard v2.1.1.json) or import it with the ID: 18826 and set the new data source
+4) Set REDIRECTION_LOGS to TRUE for Reverse-Proxy and Redirection logs, to ONLY for only Redirection logs and FALSE for only Reverse-Proxy logs
+5) create the monitoringips.txt file and fill it with the IP's of Uptimerobot, Hetrixtools or similar services. (1 IP per row)(This is optional but is recommended if you monitor your domains via http(s) with external services).
+6) get your GeoLite2-City.mmdb from the geoliteupdate container (docker-compose file below) or download it to the /home/docker/geolite directory manually
+7) Start the docker container or docker-compose with ajusted settings
+8) Add InfluxDB Bucket npmgrafstats as data source into grafana
+9) Download the dashboard file (NPM Map Dashboard v2.1.1.json) or import it with the ID: 18826 and set the new data source in Grafana
 
 ## start docker on the same host where nginx proxy manger runs
 - In the following the working directory is /home/docker !
@@ -42,12 +44,13 @@ Hope you enjoy
 docker run --name npmgraf -it -d
 -v /home/docker/nginx-proxy-manager/data/logs:/logs \
 -v /home/docker/geolite:/geolite \
+-v /home/docker/monitoringips.txt:/monitoringips.txt \ # optional only mount if preexists and a wanted feature
 -e HOME_IPS=<replace with external IP> \
 -e INFLUX_HOST=<replace>:8086 \  # use host IP
 -e INFLUX_BUCKET=npmgrafstats \
 -e INFLUX_ORG=npmgrafstats \
 -e INFLUX_TOKEN=<replace> \
--e REDIRECTION_LOGS=<set> # set to TRUE or FALSE
+-e REDIRECTION_LOGS=<set> # set to TRUE or FALSE or ONLY
 smilebasti/npmgrafstats
 ```
 ### Docker Compose file
@@ -63,10 +66,11 @@ services:
       - INFLUX_BUCKET=npmgrafstats
       - INFLUX_ORG=npmgrafstats
       - INFLUX_TOKEN=<replace>
-      - REDIRECTION_LOGS=<set> # set to TRUE or FALSE
+      - REDIRECTION_LOGS=<set> # set to TRUE or FALSE or ONLY
     volumes:
       - /home/docker/nginx-proxy-manager/data/logs:/logs
       - /home/docker/geolite:/geolite
+      - /home/docker/monitoringips.txt:/monitoringips.txt # optional only mount if preexists and a wanted feature
 ```
 
 ## GeoLite2-City.mmdb Auto update
