@@ -51,7 +51,7 @@ docker run --name npmgraf -it -d
 -e INFLUX_ORG=npmgrafstats \
 -e INFLUX_TOKEN=<replace> \
 -e REDIRECTION_LOGS=<set> # set to TRUE or FALSE or ONLY
-smilebasti/npmgrafstats
+gyarbij/npmgs
 ```
 ### Docker Compose file
 A complete docker-compose.yml file is availlibale with Npm, npmGrafStats, InfluxDB, GeoLite, Grafana and Portainer.
@@ -59,7 +59,7 @@ A complete docker-compose.yml file is availlibale with Npm, npmGrafStats, Influx
 version: '3'
 services:
   npmgraf:
-    image: smilebasti/npmgrafstats
+    image: gyarbij/npmgs
     environment:
       - HOME_IPS=<replace with external IP>
       - INFLUX_HOST=<replace>:8086  # use host IP
