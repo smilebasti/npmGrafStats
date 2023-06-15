@@ -12,6 +12,9 @@ RUN pip install -r /root/.config/NPMGRAF/requirements.txt
 COPY Getipinfo.py /root/.config/NPMGRAF/Getipinfo.py
 RUN chmod +x  /root/.config/NPMGRAF/Getipinfo.py
 
+COPY Internalipinfo.py /root/.config/NPMGRAF/Internalipinfo.py
+RUN chmod +x  /root/.config/NPMGRAF/Internalipinfo.py
+
 COPY sendips.sh /root/.config/NPMGRAF/sendips.sh
 RUN chmod +x  /root/.config/NPMGRAF/sendips.sh
 
