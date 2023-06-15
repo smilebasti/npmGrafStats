@@ -1,6 +1,6 @@
 #!/bin/bash
-echo "npmGrafStats: v2.2.1"
-echo "Startup: lets get logs data and send them to influx"
+echo "npmGrafStats: v2.3.0"
+echo "Startup: lets get the logs send them to influx"
 
 
 if [ "$REDIRECTION_LOGS" = "TRUE" ]

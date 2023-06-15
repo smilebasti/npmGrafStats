@@ -37,11 +37,12 @@ services:
       - ./mysql:/var/lib/mysql
 
   npmgraf:
-    image: smilebasti/npmgrafstats:latest
+    image: smilebasti/npmgrafstats:latest # set tag to 'latest-arm' for arm/v7 and arm64 image
     restart: unless-stopped
     environment:
-      HOME_IPS: 'extrenal IP'
-      REDIRECTION_LOGS: '<set TRUE or FALSE>' # TRUE or FALSE or ONLY
+      REDIRECTION_LOGS: '<set TRUE or FALSE or ONLY>' # TRUE or FALSE or ONLY
+      INTERNAL_LOGS: '<set TRUE or FALSE>' # see Github wiki for more information
+      MONITORING_LOGS: '<set TRUE or FALSE>' # see Github wiki for more information
       INFLUX_HOST: '<replace>:8086' # use host IP
       INFLUX_BUCKET: 'npmgrafstats'
       INFLUX_ORG: 'npmgrafstats'

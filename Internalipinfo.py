@@ -7,37 +7,17 @@ print ('Measurement-name: '+measurement_name)
 
 # argv1 = outsideip, agrv2 = Domain, argv3 length, argv4 tragetip
 
-import geoip2.database
 import socket 
  
-# IP gets infos from the DB
-reader = geoip2.database.Reader('/geolite/GeoLite2-City.mmdb')
-response = reader.city(str(sys.argv[1]))
-
-Lat = response.location.latitude
-ISO = response.country.iso_code
-Long = response.location.longitude
-State = response.subdivisions.most_specific.name
-City = response.city.name
-Country = response.country.name
-Zip = response.postal.code
 IP = str(sys.argv[1])
 Domain = str(sys.argv[2])
 duration = int(sys.argv[3])
 Target = str(sys.argv[4])
 
 # print to log
-print (Country)
-print (State)
-print (City)
-print (Zip)
-print (Long)
-print (Lat)
-print (ISO)
-print ('Outside IP: ', IP)
+print ('Calling IP: ', IP)
 print ('Target IP: ', Target)
 print ('Domain: ', Domain)
-reader.close()
 
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
@@ -53,7 +33,7 @@ iforg    = os.getenv('INFLUX_ORG')
 iftoken  = os.getenv('INFLUX_TOKEN')
 
 # take a timestamp for this measurement
-oldtime = str(sys.argv[6]) #30/May/2023:14:16:48 +0000 to 2009-11-10T23:00:00.123456Z
+oldtime = str(sys.argv[6]) #30/May/2023:14:16:48 +0000 to 2009-11-10T23:00:00+00:00 (+00:00 is Timezone)
 #transform month
 month = oldtime[3:6]
 if month == 'Jan':
@@ -95,25 +75,13 @@ ifclient = influxdb_client.InfluxDBClient(
 write_api = ifclient.write_api(write_options=SYNCHRONOUS)
 
 point = influxdb_client.Point(measurement_name)
-point.tag("key", ISO)
-point.tag("latitude", Lat)
-point.tag("longitude", Long)
 point.tag("Domain", Domain)
-point.tag("City", City)
-point.tag("State", State)
-point.tag("Name", Country)
 point.tag("IP", IP),
 point.tag("Target", Target)
 
 point.field("Domain", Domain)
-point.field("latitude", Lat)
-point.field("longitude", Long)
-point.field("State", State)
-point.field("City", City)
-point.field("key", ISO)
 point.field("IP", IP)
 point.field("Target", Target)
-point.field("Name", Country)
 point.field("duration", duration)
 point.field("metric", 1)
 
