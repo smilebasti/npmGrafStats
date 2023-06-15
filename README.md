@@ -19,14 +19,13 @@ A view of the Grafana Dashboard only within a few hours of running:
 This project is a modified clone of  https://github.com/Festeazy/nginxproxymanagerGraf and independent of https://github.com/jc21/nginx-proxy-manager. Changes to the original project can be found in the [changelog.md](https://github.com/smilebasti/npmGrafStats/blob/main/changelog.md) file.
 
 
-Obviously I'd appreciate anyhelp or feedback :) 
-Hope you enjoy
+### Obviously I'd appreciate anyhelp or feedback :) Hope you enjoy. If you do so, please star this project.
 
 # Installation
 If you are using InfluxDB v1 see Branch: https://github.com/smilebasti/npmGrafStats/tree/influx-v1. This Branch is not going to be developed in the future!
 
 ### The Installation instructions can now be found in the [GitHub Wiki](https://github.com/smilebasti/npmGrafStats/wiki). 
-Currently supported architectures: amd64, arm/v7 and arm64
+Currently supported architectures: `amd64`, `arm/v7` and `arm64`
 
 A full installation example is availlable with the [docker-compose.yml](https://github.com/smilebasti/npmGrafStats/blob/main/docker-compose.yml)
 
