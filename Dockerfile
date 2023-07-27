@@ -1,6 +1,6 @@
 FROM python:3
 
-LABEL maintainer="npmgrafstats@wieser.myhome-server.de"
+LABEL maintainer="npmgrafstats@smilebasti.myhome-server.de"
 
 ## setup home folder
 RUN mkdir -p /root/.config/NPMGRAF

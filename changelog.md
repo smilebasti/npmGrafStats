@@ -3,9 +3,14 @@
 ### Todo list
 - Get lenght and device
 - grafana more internal panels and plain numbers
-- Stop gathering after few days
+- use alpine as base image
 ### Not planned features
-- maybe analys fallback logs
+- maybe analys fallback/default/error logs
+
+## v2.3.1
+- fix stop working after some time #2 (close client connection and use tail -F instaed of tail -f)
+- add github registry
+- add docker-compose restart: unless-stopped
 
 ## v2.3.0
 - add arm/v7 and arm64/v8 image (see #11 and thanks to @Gyarbij with #12)

@@ -89,4 +89,6 @@ point.time(time)
 
 write_api.write(bucket=ifbucket, org=iforg, record=point)
 
+ifclient.close()
+
 print ('*************** data send ******************')
