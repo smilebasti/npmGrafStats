@@ -1,9 +1,11 @@
 # npmGrafStats
 NginxProxyManager Grafana Statistics.
 
-This project analyzes the logs of the Nginx Proxy Manager and exports it to InfluxDB to be used in a Grafana Dashboard.
+This project analyzes the logs of the Nginx Proxy Manager and exports them to InfluxDB to be used in a Grafana Dashboard.
 
-npmGrafStats can save the Revers-Proxy and/or the Redirection Logs. Also a exclusion of IP's from external montitoring services is possible.Following Data is extracted from the Logs:
+npmGrafStats can save the Revers-Proxy and/or the Redirection Logs. Also a exclusion of IP's from for example external montitoring services is possible. 
+
+Following Data is extracted from the Logs:
 - source IP
 - target IP in your home network set in NPM
 - the targeted domain
@@ -22,10 +24,11 @@ This project is a modified clone of  https://github.com/Festeazy/nginxproxymanag
 ### Obviously I'd appreciate anyhelp or feedback :) Hope you enjoy. If you do so, please star this project.
 
 # Installation
-If you are using InfluxDB v1 see Branch: https://github.com/smilebasti/npmGrafStats/tree/influx-v1. This Branch is not going to be developed in the future!
+If you are only able to use InfluxDB v1 see Branch: https://github.com/smilebasti/npmGrafStats/tree/influx-v1. This Branch is not being developed anymore!
 
 ### The Installation instructions can now be found in the [GitHub Wiki](https://github.com/smilebasti/npmGrafStats/wiki). 
-Currently supported architectures: `amd64`, `arm/v7` and `arm64`
+Currently supported architectures: `amd64`, `arm/v7` and `arm64`.
+
+Github Registry is now additionally availlable to Docker Registry by adding `ghcr.io/` infront of `smilebasti/npmgrafstats:latest`.
 
 A full installation example is availlable with the [docker-compose.yml](https://github.com/smilebasti/npmGrafStats/blob/main/docker-compose.yml)
-
