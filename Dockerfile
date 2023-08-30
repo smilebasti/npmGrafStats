@@ -5,6 +5,11 @@ LABEL maintainer="npmgrafstats@smilebasti.myhome-server.de"
 ## setup home folder
 RUN mkdir -p /root/.config/NPMGRAF
 
+## install curl for slim image
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt /root/.config/NPMGRAF/requirements.txt
 RUN pip install -r /root/.config/NPMGRAF/requirements.txt
 
@@ -25,6 +30,3 @@ COPY start.sh /root/start.sh
 RUN chmod +x  /root/start.sh
 
 ENTRYPOINT ["/root/start.sh"]
-
-
-
