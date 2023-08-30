@@ -3,13 +3,21 @@
 ### Todo list
 - Get lenght and device
 - grafana more internal panels and plain numbers
+
 - use alpine as base image
 ### Not planned features
 - maybe analys fallback/default/error logs
+- grafan 10.1 missle map (route feature only one and not multiple possible)
+
+## v2.3.2
+- Grafana Dashboard added Filter
+- Fix spelling in Readme
+- add ghcr.io to documentation
+- add second Dockerfile for arm images as Dockerfile now uses python:3-slim and its not working with arm/v7
 
 ## v2.3.1
 - fix stop working after some time #2 (close client connection and use tail -F instaed of tail -f)
-- add github registry
+- add github registry as alternative ghcr.io/smilebasti/npmgrafstats
 - add docker-compose restart: unless-stopped
 
 ## v2.3.0
