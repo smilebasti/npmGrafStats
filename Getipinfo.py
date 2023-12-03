@@ -25,19 +25,25 @@ IP = str(sys.argv[1])
 Domain = str(sys.argv[2])
 duration = int(sys.argv[3])
 Target = str(sys.argv[4])
+reader.close()
+
+reader = geoip2.database.Reader('/geolite/GeoLite2-ASN.mmdb')
+response = reader.asn(str(sys.argv[1]))
+Asn = response.autonomous_system_organization
+reader.close()
 
 # print to log
 print (Country)
 print (State)
 print (City)
 print (Zip)
+print (Asn)
 print (Long)
 print (Lat)
 print (ISO)
 print ('Outside IP: ', IP)
 print ('Target IP: ', Target)
 print ('Domain: ', Domain)
-reader.close()
 
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
@@ -104,6 +110,7 @@ point.tag("State", State)
 point.tag("Name", Country)
 point.tag("IP", IP),
 point.tag("Target", Target)
+point.tag("Asn", Asn)
 
 point.field("Domain", Domain)
 point.field("latitude", Lat)
@@ -113,6 +120,7 @@ point.field("City", City)
 point.field("key", ISO)
 point.field("IP", IP)
 point.field("Target", Target)
+point.field("Asn", Asn)
 point.field("Name", Country)
 point.field("duration", duration)
 point.field("metric", 1)

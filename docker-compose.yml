@@ -76,7 +76,7 @@ services:
     environment:
       GEOIPUPDATE_ACCOUNT_ID: '<replace>'
       GEOIPUPDATE_LICENSE_KEY: '<replace>'
-      GEOIPUPDATE_EDITION_IDS: 'GeoLite2-City'
+      GEOIPUPDATE_EDITION_IDS: 'GeoLite2-City GeoLite2-ASN'
       GEOIPUPDATE_FREQUENCY: 24
     volumes:
       - ./geolite:/usr/share/GeoIP
