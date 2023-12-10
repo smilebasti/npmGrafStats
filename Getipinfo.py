@@ -5,7 +5,10 @@ print ('**************** start *********************')
 measurement_name = (sys.argv[5]) # get measurement from argv
 print ('Measurement-name: '+measurement_name) 
 
-# argv1 = outsideip, agrv2 = Domain, argv3 length, argv4 tragetip
+# argv1 = outsideip, agrv2 = Domain, argv3 length, argv4 tragetip, sys.argv[5] bucketname, sys.argv[6] date, sys.argv[7] asn
+
+
+asn = str(sys.argv[7])
 
 import geoip2.database
 import socket 
@@ -27,20 +30,22 @@ duration = int(sys.argv[3])
 Target = str(sys.argv[4])
 reader.close()
 
-reader = geoip2.database.Reader('/geolite/GeoLite2-ASN.mmdb')
-response = reader.asn(str(sys.argv[1]))
-Asn = response.autonomous_system_organization
-reader.close()
+if asn =='true':
+    reader = geoip2.database.Reader('/geolite/GeoLite2-ASN.mmdb')
+    response = reader.asn(str(sys.argv[1]))
+    Asn = response.autonomous_system_organization
+    reader.close()
 
 # print to log
 print (Country)
 print (State)
 print (City)
 print (Zip)
-print (Asn)
 print (Long)
 print (Lat)
 print (ISO)
+if asn =='true':
+    print (Asn)
 print ('Outside IP: ', IP)
 print ('Target IP: ', Target)
 print ('Domain: ', Domain)
@@ -110,7 +115,8 @@ point.tag("State", State)
 point.tag("Name", Country)
 point.tag("IP", IP),
 point.tag("Target", Target)
-point.tag("Asn", Asn)
+if asn =='true':
+    point.tag("Asn", Asn)
 
 point.field("Domain", Domain)
 point.field("latitude", Lat)
@@ -120,7 +126,8 @@ point.field("City", City)
 point.field("key", ISO)
 point.field("IP", IP)
 point.field("Target", Target)
-point.field("Asn", Asn)
+if asn =='true':
+    point.field("Asn", Asn)
 point.field("Name", Country)
 point.field("duration", duration)
 point.field("metric", 1)

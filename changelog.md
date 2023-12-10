@@ -4,10 +4,14 @@
 - Get lenght and device
 - grafana more internal panels and plain numbers
 
-- use alpine as base image
 ### Not planned features
 - maybe analys fallback/default/error logs
 - grafan 10.1 missle map (route feature only one and not multiple possible)
+
+## v2.4.0
+- add ASN as optional feature see #32 and #33 thanks to @maxdd
+- added ASN to Grafana
+- added no filter Grafana Dashboard #20121
 
 ## v2.3.2
 - Grafana Dashboard added Filter

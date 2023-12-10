@@ -14,6 +14,13 @@ then
 else 
   monitorfile=false
 fi
+# check if ASN DB exists
+if [ -f "/geolite/GeoLite2-ASN.mmdb" ]
+then
+  asndb=true
+else 
+  asndb=false
+fi
 
 # gets all lines including an IP. 
 # Grep finds the the IP addresses in the access.log
@@ -53,10 +60,10 @@ do
     echo "An excluded monitoring service checked: $targetdomain"
     if [ "$MONITORING_LOGS" = "TRUE" ]
     then
-      python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "MonitoringRProxyIPs" "$measurementtime"
+      python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "MonitoringRProxyIPs" "$measurementtime" "$asndb"
     fi
   else      
-    python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "ReverseProxyConnections" "$measurementtime"
+    python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "ReverseProxyConnections" "$measurementtime" "$asndb"
   fi
 done
 reboot

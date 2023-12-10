@@ -37,7 +37,7 @@ services:
       - ./mysql:/var/lib/mysql
 
   npmgraf:
-    image: smilebasti/npmgrafstats:latest # set tag to 'latest-arm' for arm/v7 and arm64 image
+    image: smilebasti/npmgrafstats:latest # change to ghcr.io/smilebasti/npmgrafstats if you prefer Github Container Registry
     restart: unless-stopped
     environment:
       REDIRECTION_LOGS: '<set TRUE or FALSE or ONLY>' # TRUE or FALSE or ONLY
@@ -76,7 +76,7 @@ services:
     environment:
       GEOIPUPDATE_ACCOUNT_ID: '<replace>'
       GEOIPUPDATE_LICENSE_KEY: '<replace>'
-      GEOIPUPDATE_EDITION_IDS: 'GeoLite2-City GeoLite2-ASN'
+      GEOIPUPDATE_EDITION_IDS: 'GeoLite2-City  GeoLite2-ASN'  #GeoLite2-ASN is optional
       GEOIPUPDATE_FREQUENCY: 24
     volumes:
       - ./geolite:/usr/share/GeoIP
