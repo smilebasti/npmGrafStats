@@ -36,6 +36,29 @@ if asn =='true':
     Asn = response.autonomous_system_organization
     reader.close()
 
+## get env vars and use
+import os
+import requests
+import json
+
+abuseip_key = os.getenv('ABUSEIP_KEY')
+if abuseip_key is not None:
+    url = 'https://api.abuseipdb.com/api/v2/check'
+    querystring = {
+        'ipAddress': str(sys.argv[1]),
+        'maxAgeInDays': '90'
+    }
+    headers = {
+        'Accept': 'application/json',
+        'Key': abuseip_key
+    }
+
+    response = requests.request(method='GET', url=url, headers=headers, params=querystring)
+    abuseip_response = json.loads(response.text)
+    abuseConfidenceScore = str(abuseip_response["data"]["abuseConfidenceScore"])
+    totalReports = str(abuseip_response["data"]["totalReports"])
+    #print(json.dumps(abuseip_response, sort_keys=True, indent=4))
+
 # print to log
 print (Country)
 print (State)
@@ -49,14 +72,14 @@ if asn =='true':
 print ('Outside IP: ', IP)
 print ('Target IP: ', Target)
 print ('Domain: ', Domain)
+if abuseip_key is not None:
+    print("abuseConfidenceScore: " + abuseConfidenceScore)
+    print("totalReports: " + totalReports)
 
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-## get env vars and use
-import os
 # influx configuration - edit these
-
 npmhome = "/root/.config/NPMGRAF"
 ifhost = os.getenv('INFLUX_HOST')
 ifbucket = os.getenv('INFLUX_BUCKET')
@@ -117,6 +140,9 @@ point.tag("IP", IP),
 point.tag("Target", Target)
 if asn =='true':
     point.tag("Asn", Asn)
+if abuseip_key is not None:
+    point.tag("abuseConfidenceScore", abuseConfidenceScore)
+    point.tag("totalReports", totalReports)
 
 point.field("Domain", Domain)
 point.field("latitude", Lat)
@@ -131,6 +157,9 @@ if asn =='true':
 point.field("Name", Country)
 point.field("duration", duration)
 point.field("metric", 1)
+if abuseip_key is not None:
+    point.field("abuseConfidenceScore", abuseConfidenceScore)
+    point.field("totalReports", totalReports)
 
 point.time(time)
 
