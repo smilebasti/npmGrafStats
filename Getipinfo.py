@@ -1,11 +1,35 @@
 #!/usr/bin/python3
 
 import sys
+import os
 print ('**************** start *********************')
 measurement_name = (sys.argv[5]) # get measurement from argv
 print ('Measurement-name: '+measurement_name) 
 
-# argv1 = outsideip, agrv2 = Domain, argv3 length, argv4 tragetip, sys.argv[5] bucketname, sys.argv[6] date, sys.argv[7] asn
+# argv1 = outsideip, agrv2 = Domain, argv3 length, argv4 tragetip, sys.argv[5] bucketname, sys.argv[6] date, sys.argv[7] asn, sys.argv[8] abuse
+
+
+
+
+abuseip_key = os.getenv('ABUSEIP_KEY')
+if abuseip_key is not None:
+    import requests
+    import json
+    url = 'https://api.abuseipdb.com/api/v2/check'
+    querystring = {
+        'ipAddress': str(sys.argv[1]),
+        'maxAgeInDays': '90'
+    }
+    headers = {
+        'Accept': 'application/json',
+        'Key': abuseip_key
+    }
+
+    response = requests.request(method='GET', url=url, headers=headers, params=querystring)
+    abuseip_response = json.loads(response.text)
+    abuseConfidenceScore = str(abuseip_response["data"]["abuseConfidenceScore"])
+    totalReports = str(abuseip_response["data"]["totalReports"])
+    #print(json.dumps(abuseip_response, sort_keys=True, indent=4))
 
 
 asn = str(sys.argv[7])
@@ -36,29 +60,6 @@ if asn =='true':
     Asn = response.autonomous_system_organization
     reader.close()
 
-## get env vars and use
-import os
-import requests
-import json
-
-abuseip_key = os.getenv('ABUSEIP_KEY')
-if abuseip_key is not None:
-    url = 'https://api.abuseipdb.com/api/v2/check'
-    querystring = {
-        'ipAddress': str(sys.argv[1]),
-        'maxAgeInDays': '90'
-    }
-    headers = {
-        'Accept': 'application/json',
-        'Key': abuseip_key
-    }
-
-    response = requests.request(method='GET', url=url, headers=headers, params=querystring)
-    abuseip_response = json.loads(response.text)
-    abuseConfidenceScore = str(abuseip_response["data"]["abuseConfidenceScore"])
-    totalReports = str(abuseip_response["data"]["totalReports"])
-    #print(json.dumps(abuseip_response, sort_keys=True, indent=4))
-
 # print to log
 print (Country)
 print (State)
@@ -78,6 +79,7 @@ if abuseip_key is not None:
 
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
+
 
 # influx configuration - edit these
 npmhome = "/root/.config/NPMGRAF"

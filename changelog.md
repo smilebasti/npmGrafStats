@@ -8,6 +8,9 @@
 - maybe analys fallback/default/error logs
 - grafan 10.1 missle map (route feature only one and not multiple possible)
 
+## v2.4.1
+- add AbuseIPDB check to container (not included in Grafana Dashboard, add manually) Thanks to @maxdd in #38 and #39
+
 ## v2.4.0
 - add ASN as optional feature see #32 and #33 thanks to @maxdd
 - added ASN to Grafana
