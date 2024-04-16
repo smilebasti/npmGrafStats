@@ -2,21 +2,19 @@
 
 import sys
 print ('**************** start *********************')
-measurement_name = (sys.argv[5]) # get measurement from argv
+measurement_name = (sys.argv[4]) # get measurement from argv
 print ('Measurement-name: '+measurement_name) 
 
-# argv1 = outsideip, agrv2 = Domain, argv3 length, argv4 tragetip
+# argv1 = outsideip, agrv2 = Domain, argv3 length , argv4 measurementname, argv5 time
 
 import socket 
  
 IP = str(sys.argv[1])
 Domain = str(sys.argv[2])
 duration = int(sys.argv[3])
-Target = str(sys.argv[4])
 
 # print to log
 print ('Calling IP: ', IP)
-print ('Target IP: ', Target)
 print ('Domain: ', Domain)
 
 import influxdb_client
@@ -33,7 +31,7 @@ iforg    = os.getenv('INFLUX_ORG')
 iftoken  = os.getenv('INFLUX_TOKEN')
 
 # take a timestamp for this measurement
-oldtime = str(sys.argv[6]) #30/May/2023:14:16:48 +0000 to 2009-11-10T23:00:00+00:00 (+00:00 is Timezone)
+oldtime = str(sys.argv[5]) #30/May/2023:14:16:48 +0000 to 2009-11-10T23:00:00+00:00 (+00:00 is Timezone)
 #transform month
 month = oldtime[3:6]
 if month == 'Jan':
@@ -76,12 +74,10 @@ write_api = ifclient.write_api(write_options=SYNCHRONOUS)
 
 point = influxdb_client.Point(measurement_name)
 point.tag("Domain", Domain)
-point.tag("IP", IP),
-point.tag("Target", Target)
+point.tag("IP", IP)
 
 point.field("Domain", Domain)
 point.field("IP", IP)
-point.field("Target", Target)
 point.field("duration", duration)
 point.field("metric", 1)
 

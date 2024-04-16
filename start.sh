@@ -1,23 +1,8 @@
 #!/bin/bash
-echo "npmGrafStats: v2.4.1"
+echo "npmGrafStats: plus-v2.4.1"
 echo "Startup: lets get the logs send them to influx"
 
-
-if [ "$REDIRECTION_LOGS" = "TRUE" ]
-then
-    echo "Redirection and Reverse-Proxy Logs activated"
-    bash /root/.config/NPMGRAF/sendips.sh &
-    bash /root/.config/NPMGRAF/sendredirectionips.sh &
-
-elif [ "$REDIRECTION_LOGS" = "ONLY" ]
-then
-    echo "Only Redirection Logs activated"
-    bash /root/.config/NPMGRAF/sendredirectionips.sh
-
-else
-    echo "Only Reverse-Proxy Logs activated"
-    bash /root/.config/NPMGRAF/sendips.sh
-fi
+bash /root/.config/NPMGRAF/sendips.sh
 
 sleep 0.5
 # reads from standard input and writes to standard output and in file

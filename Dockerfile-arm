@@ -18,9 +18,6 @@ RUN chmod +x  /root/.config/NPMGRAF/Internalipinfo.py
 COPY sendips.sh /root/.config/NPMGRAF/sendips.sh
 RUN chmod +x  /root/.config/NPMGRAF/sendips.sh
 
-COPY sendredirectionips.sh /root/.config/NPMGRAF/sendredirectionips.sh
-RUN chmod +x  /root/.config/NPMGRAF/sendredirectionips.sh
-
 COPY start.sh /root/start.sh
 RUN chmod +x  /root/start.sh
 

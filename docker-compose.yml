@@ -1,46 +1,21 @@
 version: '3.8'
 services:
-  npm:
-    image: 'jc21/nginx-proxy-manager:latest'
-    restart: unless-stopped
-    ports:
-      # These ports are in format <host-port>:<container-port>
-      - '80:80' # Public HTTP Port
-      - '443:443' # Public HTTPS Port
-      - '81:81' # Admin Web Port
-      # Add any other Stream port you want to expose
-      # - '21:21' # FTP
-    environment:
-      # Mysql/Maria connection parameters:
-      DB_MYSQL_HOST: "db"
-      DB_MYSQL_PORT: 3306
-      DB_MYSQL_USER: "npm"
-      DB_MYSQL_PASSWORD: "npm"
-      DB_MYSQL_NAME: "npm"
-      # Uncomment this if IPv6 is not enabled on your host
-      # DISABLE_IPV6: 'true'
+  npmplus:
+    container_name: npmplus
+    image: zoeyvid/npmplus
+    restart: always
+    network_mode: host
     volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
-    depends_on:
-      - db
-
-  db:
-    image: 'jc21/mariadb-aria:latest'
-    restart: unless-stopped
+      - "/opt/npm:/data"
     environment:
-      MYSQL_ROOT_PASSWORD: 'npm'
-      MYSQL_DATABASE: 'npm'
-      MYSQL_USER: 'npm'
-      MYSQL_PASSWORD: 'npm'
-    volumes:
-      - ./mysql:/var/lib/mysql
+      - "TZ=Europe/Berlin" # set timezone, required
+      - "LOGROTATE=true" # required for npmgrafstats
+      # for more see https://github.com/ZoeyVid/NPMplus/blob/develop/compose.yaml
 
   npmgraf:
-    image: smilebasti/npmgrafstats:latest # change to ghcr.io/smilebasti/npmgrafstats if you prefer Github Container Registry
+    image: smilebasti/npmgrafstats:plus-latest # change to ghcr.io/smilebasti/npmgrafstats if you prefer Github Container Registry
     restart: unless-stopped
     environment:
-      REDIRECTION_LOGS: '<set TRUE or FALSE or ONLY>' # TRUE or FALSE or ONLY
       INTERNAL_LOGS: '<set TRUE or FALSE>' # see Github wiki for more information
       MONITORING_LOGS: '<set TRUE or FALSE>' # see Github wiki for more information
       INFLUX_HOST: '<replace>:8086' # use host IP
@@ -48,12 +23,12 @@ services:
       INFLUX_ORG: 'npmgrafstats'
       INFLUX_TOKEN: '<replace>' # insert after first run and manual token creation
     volumes:
-      - ./data/logs:/logs
+      - /opt/npm/nginx/access.log:/access.log
       - ./geolite:/geolite
       - ./monitoringips.txt:/monitoringips.txt # optional only mount if preexists and a wanted feature
     depends_on:
       - geoipupdate
-      - npm
+      - npmplus
 
   influxdb:
     image: influxdb:2.7-alpine

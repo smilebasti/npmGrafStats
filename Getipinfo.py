@@ -3,10 +3,10 @@
 import sys
 import os
 print ('**************** start *********************')
-measurement_name = (sys.argv[5]) # get measurement from argv
+measurement_name = (sys.argv[4]) # get measurement from argv
 print ('Measurement-name: '+measurement_name) 
 
-# argv1 = outsideip, agrv2 = Domain, argv3 length, argv4 tragetip, sys.argv[5] bucketname, sys.argv[6] date, sys.argv[7] asn, sys.argv[8] abuse
+# argv1 = outsideip, agrv2 = Domain, argv3 length,  sys.argv[4] bucketname, sys.argv[5] date, sys.argv[6] asn
 
 
 
@@ -32,7 +32,7 @@ if abuseip_key is not None:
     #print(json.dumps(abuseip_response, sort_keys=True, indent=4))
 
 
-asn = str(sys.argv[7])
+asn = str(sys.argv[6])
 
 import geoip2.database
 import socket 
@@ -51,7 +51,6 @@ Zip = response.postal.code
 IP = str(sys.argv[1])
 Domain = str(sys.argv[2])
 duration = int(sys.argv[3])
-Target = str(sys.argv[4])
 reader.close()
 
 if asn =='true':
@@ -71,7 +70,6 @@ print (ISO)
 if asn =='true':
     print (Asn)
 print ('Outside IP: ', IP)
-print ('Target IP: ', Target)
 print ('Domain: ', Domain)
 if abuseip_key is not None:
     print("abuseConfidenceScore: " + abuseConfidenceScore)
@@ -89,7 +87,7 @@ iforg    = os.getenv('INFLUX_ORG')
 iftoken  = os.getenv('INFLUX_TOKEN')
 
 # take a timestamp for this measurement
-oldtime = str(sys.argv[6]) #30/May/2023:14:16:48 +0000 to 2009-11-10T23:00:00.123456Z
+oldtime = str(sys.argv[5]) #30/May/2023:14:16:48 +0000 to 2009-11-10T23:00:00.123456Z
 #transform month
 month = oldtime[3:6]
 if month == 'Jan':
@@ -138,8 +136,7 @@ point.tag("Domain", Domain)
 point.tag("City", City)
 point.tag("State", State)
 point.tag("Name", Country)
-point.tag("IP", IP),
-point.tag("Target", Target)
+point.tag("IP", IP)
 if asn =='true':
     point.tag("Asn", Asn)
 if abuseip_key is not None:
@@ -153,7 +150,6 @@ point.field("State", State)
 point.field("City", City)
 point.field("key", ISO)
 point.field("IP", IP)
-point.field("Target", Target)
 if asn =='true':
     point.field("Asn", Asn)
 point.field("Name", Country)

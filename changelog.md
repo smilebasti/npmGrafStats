@@ -8,6 +8,13 @@
 - maybe analys fallback/default/error logs
 - grafan 10.1 missle map (route feature only one and not multiple possible)
 
+## plus-v2.4.1
+- create Branch npmPlus-main
+- remove targetip (not availlable)
+- remove redirection (no seperation)
+- update docker-compose file
+- change container tags to plus-latest and similar
+
 ## v2.4.1
 - add AbuseIPDB check to container (not included in Grafana Dashboard, add manually) Thanks to @maxdd in #38 and #39
 
