@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "npmGrafStats: v2.4.1"
+echo "npmGrafStats: v2.4.2-pre"
 echo "Startup: lets get the logs send them to influx"
 
 

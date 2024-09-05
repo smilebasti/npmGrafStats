@@ -19,7 +19,7 @@ A view of the Grafana Dashboard only within a few hours of running:
 ![npmGrafStats](https://user-images.githubusercontent.com/60941345/203383131-50b7197e-2e58-4bb1-a7e6-d92e15d3430a.png)
 
 ## Newest features
-v2.3.2 added in the Grafana dashboard a filter option to select only a few specific domains. Also the latest image is now running python:3-slim as base image (***80% smaller*** than before!).
+v2.4.2 added cidr notation to the monitoringips.txt (CIDR format	a.b.c.d/xx or aa:bb::cc::dd/xx IP range	a.b.c.d-e.f.g.h Single IP	a.b.c.d or aa:bb:cc::dd).
 
 This project is a modified clone of  https://github.com/Festeazy/nginxproxymanagerGraf and independent of https://github.com/jc21/nginx-proxy-manager. Changes to the original project can be found in the [changelog.md](https://github.com/smilebasti/npmGrafStats/blob/main/changelog.md) file.
 
@@ -36,3 +36,6 @@ Github Registry is now additionally available to Docker Registry by adding `ghcr
 
 A full installation example is available with the [docker-compose.yml](https://github.com/smilebasti/npmGrafStats/blob/main/docker-compose.yml)
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=smilebasti/npmgrafstats&type=Date)](https://star-history.com/#smilebasti/npmgrafstats&Date)

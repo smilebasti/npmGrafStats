@@ -8,6 +8,9 @@
 - maybe analys fallback/default/error logs
 - grafan 10.1 missle map (route feature only one and not multiple possible)
 
+## v2.4.2
+- add cidr notation in monitoringips.txt file (see #45 thanks @pitbull)
+
 ## v2.4.1
 - add AbuseIPDB check to container (not included in Grafana Dashboard, add manually) Thanks to @maxdd in #38 and #39
 

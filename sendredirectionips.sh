@@ -48,7 +48,7 @@ do
     then
       python /root/.config/NPMGRAF/Internalipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "InternalRProxyIPs" "$measurementtime"
     fi
-  elif $monitorfile && grep --line-buffered -qFx $outsideip /monitoringips.txt
+  elif $monitorfile && grepcidr -D $outsideip /monitoringips.txt >> /dev/null
   then
     echo "An excluded monitoring service checked: $targetdomain"
     if [ "$MONITORING_LOGS" = "TRUE" ]

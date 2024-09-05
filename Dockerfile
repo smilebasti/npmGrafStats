@@ -5,10 +5,25 @@ LABEL maintainer="npmgrafstats@smilebasti.myhome-server.de"
 ## setup home folder
 RUN mkdir -p /root/.config/NPMGRAF
 
-## install curl for slim image
+## install curl gcc for slim image
 RUN apt-get update && apt-get install -y \
-    curl gcc \
+    curl gcc git build-essential\
     && rm -rf /var/lib/apt/lists/*
+
+# Clone the grepcidr repository
+RUN git clone https://github.com/ryantig/grepcidr.git /opt/grepcidr
+
+# Build and install grepcidr
+RUN cd /opt/grepcidr && \
+    make && \
+    make install
+
+# Clean up by removing the source code if not needed
+RUN rm -rf /opt/grepcidr
+
+RUN apt-get remove git build-essential -y\
+    && rm -rf /var/cache/apk/* \
+    && apt-get autoremove -y && apt-get clean 
 
 COPY requirements.txt /root/.config/NPMGRAF/requirements.txt
 RUN pip install -r /root/.config/NPMGRAF/requirements.txt
