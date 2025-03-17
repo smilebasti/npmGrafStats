@@ -31,6 +31,10 @@ ifhost = os.getenv('INFLUX_HOST')
 ifbucket = os.getenv('INFLUX_BUCKET')
 iforg    = os.getenv('INFLUX_ORG')
 iftoken  = os.getenv('INFLUX_TOKEN')
+iftokenfile = os.getenv('INFLUX_TOKEN_FILE')
+if iftokenfile is not None and os.path.isfile(iftokenfile):
+    with open(iftokenfile, 'r') as file:
+        iftoken = file.read().strip()
 
 # take a timestamp for this measurement
 oldtime = str(sys.argv[6]) #30/May/2023:14:16:48 +0000 to 2009-11-10T23:00:00+00:00 (+00:00 is Timezone)
