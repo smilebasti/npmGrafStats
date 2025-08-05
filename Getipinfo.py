@@ -54,11 +54,21 @@ duration = int(sys.argv[3])
 Target = str(sys.argv[4])
 reader.close()
 
-if asn =='true':
-    reader = geoip2.database.Reader('/geolite/GeoLite2-ASN.mmdb')
-    response = reader.asn(str(sys.argv[1]))
-    Asn = response.autonomous_system_organization
-    reader.close()
+import sys
+import geoip2.database
+
+if asn == 'true':
+    try:
+        reader = geoip2.database.Reader('/geolite/GeoLite2-ASN.mmdb')
+        response = reader.asn(str(sys.argv[1]))
+        Asn = response.autonomous_system_organization
+    except geoip2.errors.AddressNotFoundError:
+        Asn = "No ASN associated"
+    except Exception as e:
+        Asn = f"An error occurred: {e}"
+    finally:
+        reader.close()
+
 
 # print to log
 print (Country)

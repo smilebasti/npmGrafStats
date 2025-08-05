@@ -1,7 +1,7 @@
 # npmGrafStats
 NginxProxyManager Grafana Statistics.
 
-This project analyzes the logs of the Nginx Proxy Manager and exports them to InfluxDB to be used in a Grafana Dashboard.
+This project analyzes the logs of the Nginx Proxy Manager and exports them to InfluxDB to be used in a Grafana Dashboard. If you are using npmPlus have a look at the branch: https://github.com/smilebasti/npmGrafStats/tree/npmPlus-main
 
 npmGrafStats can save the Revers-Proxy and/or the Redirection Logs. Also a exclusion of IP's from for example external montitoring services is possible. 
 
@@ -19,7 +19,7 @@ A view of the Grafana Dashboard only within a few hours of running:
 ![npmGrafStats](https://user-images.githubusercontent.com/60941345/203383131-50b7197e-2e58-4bb1-a7e6-d92e15d3430a.png)
 
 ## Newest features
-v2.4.2 added cidr notation to the monitoringips.txt (CIDR format	a.b.c.d/xx or aa:bb::cc::dd/xx IP range	a.b.c.d-e.f.g.h Single IP	a.b.c.d or aa:bb:cc::dd).
+v2.4.3 optimizations and fixes and add support for npmPlus (see branch https://github.com/smilebasti/npmGrafStats/tree/npmPlus-main)
 
 This project is a modified clone of  https://github.com/Festeazy/nginxproxymanagerGraf and independent of https://github.com/jc21/nginx-proxy-manager. Changes to the original project can be found in the [changelog.md](https://github.com/smilebasti/npmGrafStats/blob/main/changelog.md) file.
 

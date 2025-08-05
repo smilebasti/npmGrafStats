@@ -2,11 +2,18 @@
 
 ### Todo list
 - Get lenght and device
-- grafana more internal panels and plain numbers
+- add Status code (see #53 thanks @gitwasi)
+- add status code to Grafana
 
 ### Not planned features
 - maybe analys fallback/default/error logs
 - grafan 10.1 missle map (route feature only one and not multiple possible)
+
+## v2.4.3
+- make dockerfiles multi stage builds
+- add seperate Branch of npmPlusGrafStats (main and version)
+- fix #47 - handle if no ASN is found 
+- add concurrent processing
 
 ## v2.4.2
 - add cidr notation in monitoringips.txt file (see #45 thanks @pitbull)
