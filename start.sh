@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "npmGrafStats: plus-v2.4.1"
+echo "npmGrafStats:plus-v2.4.3"
 echo "Startup: lets get the logs send them to influx"
 
 bash /root/.config/NPMGRAF/sendips.sh

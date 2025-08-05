@@ -24,7 +24,8 @@ fi
 
 # gets all lines including an IP. 
 # Grep finds the the IP addresses in the access.log
-tail -F /access.log | grep --line-buffered -v "localhost" | while read line;
+process_logfile(){
+tail --follow=name --retry "$logfile" | grep --line-buffered -v "localhost" | while read line;
 
 do
   # Domain or subdomain gets found.
@@ -45,7 +46,10 @@ do
   #Idea of getting device
   #device=`echo $line | grep -e ""'('*')'""`
 
-  if [[ $outsideip =~ $internalips ]] || [[ $outsideip =~ $externalip ]]
+  if [[ $outsideip == "127.0.0.1" ]]
+  then
+    continue
+  elif [[ $outsideip =~ $internalips ]] || [[ $outsideip =~ $externalip ]]
   then
     echo "Internal IP-Source: $outsideip called: $targetdomain"
     if [ "$INTERNAL_LOGS" = "TRUE" ]
@@ -63,4 +67,10 @@ do
     python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "0" "ReverseProxyConnections" "$measurementtime" "$asndb"
   fi
 done
-reboot
+}
+
+for logfile in /nginx/access.log; do
+  process_logfile "$logfile" &
+done
+
+wait

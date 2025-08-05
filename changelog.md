@@ -1,12 +1,17 @@
-# Changelog
+# Changelog npmPlus
 
 ### Todo list
 - Get lenght and device
-- grafana more internal panels and plain numbers
+- add status code
 
 ### Not planned features
 - maybe analys fallback/default/error logs
-- grafan 10.1 missle map (route feature only one and not multiple possible)
+- grafana 10.1 missle map (route feature only one and not multiple possible)
+
+## plus-v2.4.3
+- add cidr notation in monitoringips.txt file (see #45 thanks @pitbull)
+- make the docker file a multi stage build
+- optimize speed with background processes
 
 ## plus-v2.4.1
 - create Branch npmPlus-main
@@ -14,6 +19,7 @@
 - remove redirection (no seperation)
 - update docker-compose file
 - change container tags to plus-latest and similar
+- change log following
 
 ## v2.4.1
 - add AbuseIPDB check to container (not included in Grafana Dashboard, add manually) Thanks to @maxdd in #38 and #39

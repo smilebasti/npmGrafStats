@@ -1,12 +1,11 @@
-version: '3.8'
 services:
   npmplus:
     container_name: npmplus
-    image: zoeyvid/npmplus
+    image: zoeyvid/npmplus:latest
     restart: always
     network_mode: host
     volumes:
-      - "/opt/npm:/data"
+      - "/opt/npmplus:/data"
     environment:
       - "TZ=Europe/Berlin" # set timezone, required
       - "LOGROTATE=true" # required for npmgrafstats
@@ -18,12 +17,12 @@ services:
     environment:
       INTERNAL_LOGS: '<set TRUE or FALSE>' # see Github wiki for more information
       MONITORING_LOGS: '<set TRUE or FALSE>' # see Github wiki for more information
-      INFLUX_HOST: '<replace>:8086' # use host IP
+      INFLUX_HOST: 'http://influxdb:8086' # use host IP if necessary
       INFLUX_BUCKET: 'npmgrafstats'
       INFLUX_ORG: 'npmgrafstats'
-      INFLUX_TOKEN: '<replace>' # insert after first run and manual token creation
+      INFLUX_TOKEN: '<replace>' # REQUIRED! insert after first run and manual token creation
     volumes:
-      - /opt/npm/nginx/access.log:/access.log
+      - /opt/npmplus/nginx:/nginx
       - ./geolite:/geolite
       - ./monitoringips.txt:/monitoringips.txt # optional only mount if preexists and a wanted feature
     depends_on:
