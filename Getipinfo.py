@@ -10,11 +10,15 @@ print('**************** start *********************')
 measurement_name = sys.argv[4]  # get measurement from argv
 print('Measurement-name: ' + measurement_name)
 
-# --- Cache Configuration ---
-NPMGRAF_HOME = "/root/.config/NPMGRAF"
-CACHE_FILE = os.path.join(NPMGRAF_HOME, "abuseip_cache.json")
+# --- Configuration for Persistent Data ---
+DATA_DIR = "/data"
+CACHE_FILE = os.path.join(DATA_DIR, "abuseip_cache.json")
 CACHE_EXPIRATION_HOURS = 24
-# --- End Cache Configuration ---
+# --- End Configuration ---
+
+# Ensure the data directory exists
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
 
 # Function to load the cache from the file
 def load_cache():

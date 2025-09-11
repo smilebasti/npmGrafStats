@@ -21,10 +21,12 @@ services:
       INFLUX_BUCKET: 'npmgrafstats'
       INFLUX_ORG: 'npmgrafstats'
       INFLUX_TOKEN: '<replace>' # REQUIRED! insert after first run and manual token creation
+      ABUSEIP_KEY: '<YOUR_ABUSEIPDB_API_KEY_HERE>' # Add your AbuseIPDB key here
     volumes:
       - /opt/npmplus/nginx:/nginx
       - ./geolite:/geolite
-      - ./monitoringips.txt:/monitoringips.txt # optional only mount if preexists and a wanted feature
+      # THE CHANGE: Mount a single directory for all persistent data
+      - ./npmgraf_data:/data
     depends_on:
       - geoipupdate
       - npmplus
@@ -58,13 +60,13 @@ services:
   portainer:
     image: portainer/portainer-ce:latest
     restart: always
-    ports: 
+    ports:
       - '8000:8000'
       - '9000:9000'
       - '9443:9443'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./portainer_data:/data 
+      - ./portainer_data:/data
 
   grafana:
     image: grafana/grafana-oss
@@ -72,4 +74,4 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./grafana-storage:/var/lib/grafana # after start: sudo chown 472:472 grafana-storage 
+      - ./grafana-storage:/var/lib/grafana # after start: sudo chown 472:472 grafana-storage

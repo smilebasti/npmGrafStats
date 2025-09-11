@@ -7,22 +7,25 @@ internalips="(10([\.][0-9]{1,3}){3})|(192.168([\.][0-9]{1,3}){2})|(172.(1[6-9]|2
 externalip=`curl -s ifconfig.me/ip`
 echo "Your external IP is: $externalip"
 
+# Define the path for the monitoring IPs file
+MONITOR_FILE_PATH="/data/monitoringips.txt"
+
 # check if monitoringips.txt exists
-if [ -f "/monitoringips.txt" ]
+if [ -f "$MONITOR_FILE_PATH" ]
 then
   monitorfile=true
-else 
+else
   monitorfile=false
 fi
 # check if ASN DB exists
 if [ -f "/geolite/GeoLite2-ASN.mmdb" ]
 then
   asndb=true
-else 
+else
   asndb=false
 fi
 
-# gets all lines including an IP. 
+# gets all lines including an IP.
 # Grep finds the the IP addresses in the access.log
 process_logfile(){
 tail --follow=name --retry "$logfile" | grep --line-buffered -v "localhost" | while read line;
@@ -33,14 +36,14 @@ do
   # The above cuts the echo output with a space delimiter (-d' ') and outputs the thrid field (-f3)
 
   # Get the first ip found = outsideip
-  outsideip=`echo $line | cut -d' ' -f4` 
+  outsideip=`echo $line | cut -d' ' -f4`
 
   # get time from logs
   measurementtime=`echo ${line:1:26} `
   #echo "measurement time: $measurementtime"
 
-  # What does length say? 
-  # save from 14 postion after space and only the first digits found to length 
+  # What does length say?
+  # save from 14 postion after space and only the first digits found to length
   # length=`echo $line | awk -F ' ' '{print$14}' | grep --line-buffered -m 1 -o '[[:digit:]]*'`
 
   #Idea of getting device
@@ -56,14 +59,14 @@ do
     then
       python /root/.config/NPMGRAF/Internalipinfo.py "$outsideip" "$targetdomain" "0" "InternalRProxyIPs" "$measurementtime"
     fi
-  elif $monitorfile && grep --line-buffered -qFx $outsideip /monitoringips.txt
+  elif $monitorfile && grep --line-buffered -qFx "$outsideip" "$MONITOR_FILE_PATH"
   then
     echo "An excluded monitoring service checked: $targetdomain"
     if [ "$MONITORING_LOGS" = "TRUE" ]
     then
       python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "0" "MonitoringRProxyIPs" "$measurementtime" "$asndb"
     fi
-  else      
+  else
     python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "0" "ReverseProxyConnections" "$measurementtime" "$asndb"
   fi
 done
