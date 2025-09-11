@@ -3,7 +3,7 @@
 
 # To better understand the collection with regular expression
 # {1,3} get one to three characters. [0-9] character from to 0 to 9. \ for special characters. () grouping as an expression. | or
-internalips="(10([\.][0-9]{1,3}){3})|(192.168([\.][0-9]{1,3}){2})|(172.(1[6-9]|2[0-9]|3[0-1])([\.][0-9]{1,3}){2})"
+internalips="(10([\.][0-9]{1,3}){3})|(192.168([\.][0-9]{1,3}){2})|(172.(1[6-9]|2[0-9]|3[0-1])([\.][0-9]{1,3}){2})|(::1)|(f[cd][0-9a-fA-F]{2}:)|(fe[89ab][0-9a-fA-F]:)"
 externalip=`curl -s ifconfig.me/ip`
 echo "Your external IP is: $externalip"
 
@@ -69,7 +69,7 @@ do
 done
 }
 
-for logfile in /nginx/access.log; do
+for logfile in /nginx/access.log* /nginx/*_proxy.log; do
   process_logfile "$logfile" &
 done
 
