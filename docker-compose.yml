@@ -20,12 +20,11 @@ services:
       INFLUX_HOST: 'http://influxdb:8086' # use host IP if necessary
       INFLUX_BUCKET: 'npmgrafstats'
       INFLUX_ORG: 'npmgrafstats'
-      INFLUX_TOKEN: '<replace>' # REQUIRED! insert after first run and manual token creation
-      ABUSEIP_KEY: '<YOUR_ABUSEIPDB_API_KEY_HERE>' # Add your AbuseIPDB key here
+      INFLUX_TOKEN: '' # REQUIRED: insert or add to ./npmgraf_data/influxdb-token.txt after manual Influxdb bucket token creation
+      # ABUSEIP_KEY: '<YOUR_ABUSEIPDB_API_KEY_HERE>' # optional: insert or add to ./npmgraf_data/abuseipdb-key.txt
     volumes:
       - /opt/npmplus/nginx:/nginx
       - ./geolite:/geolite
-      # THE CHANGE: Mount a single directory for all persistent data
       - ./npmgraf_data:/data
     depends_on:
       - geoipupdate
@@ -60,13 +59,13 @@ services:
   portainer:
     image: portainer/portainer-ce:latest
     restart: always
-    ports:
+    ports: 
       - '8000:8000'
       - '9000:9000'
       - '9443:9443'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./portainer_data:/data
+      - ./portainer_data:/data 
 
   grafana:
     image: grafana/grafana-oss
@@ -74,4 +73,4 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./grafana-storage:/var/lib/grafana # after start: sudo chown 472:472 grafana-storage
+      - ./grafana-storage:/var/lib/grafana # after start: sudo chown 472:472 grafana-storage 

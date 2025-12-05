@@ -1,12 +1,19 @@
 # Changelog npmPlus
 
-### Todo list
-- Get lenght and device
-- add status code
-
 ### Not planned features
-- maybe analys fallback/default/error logs
+- maybe analyse fallback/default/error logs
 - grafana 10.1 missle map (route feature only one and not multiple possible)
+- Get device
+
+## plus-v3.0.0
+- internal ipv6 (see #56 thanks @priyankub)
+- cache abuseipdb (see #56 thanks @priyankub) !Cache can corrupt if write is interupted. Run docker compose down before directly running docker compose up after pull!
+- posiblity to use multiple log files (see #56 thanks @priyankub)
+- add status code (see #53 thanks @gitwasi)
+- fix monitoringips grepcidr (see #41 thanks @pittbull)
+- added lenght (transferd bytes)
+- added option to read Influx token and Abuseipdb key from a file (see #52 thanks @emerick-biron)
+- updated Grafana Dashboard
 
 ## plus-v2.4.3
 - add cidr notation in monitoringips.txt file (see #45 thanks @pitbull)
