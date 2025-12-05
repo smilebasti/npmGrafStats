@@ -45,11 +45,12 @@ services:
       INFLUX_HOST: 'http://influxdb:8086' # use host IP if necessary
       INFLUX_BUCKET: 'npmgrafstats'
       INFLUX_ORG: 'npmgrafstats'
-      INFLUX_TOKEN: '<replace>' # REQUIRED! insert after first run and manual token creation
+      INFLUX_TOKEN: '' # REQUIRED: insert or add to ./npmgraf_data/influxdb-token.txt after manual Influxdb bucket token creation
+      # ABUSEIP_KEY: '<YOUR_ABUSEIPDB_API_KEY_HERE>' # optional: insert or add to ./npmgraf_data/abuseipdb-key.txt
     volumes:
       - ./data/logs:/logs
       - ./geolite:/geolite
-      - ./monitoringips.txt:/monitoringips.txt # optional only mount if preexists and a wanted feature
+      - ./npmgraf_data:/data
     depends_on:
       - geoipupdate
       - npm

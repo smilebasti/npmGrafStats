@@ -1,7 +1,12 @@
 #!/bin/bash
-echo "npmGrafStats: v2.4.3"
+echo "npmGrafStats: v3.0.0"
 echo "Startup: lets get the logs send them to influx"
 
+if [ -z "$INFLUX_TOKEN" ] && [ ! -f "/data/influxdb-token.txt" ]; then
+    echo 'No InfluxDB Token as variable or in influxdb-token.txt file found.'
+    echo 'Please add the Token. Exiting now.'
+    exit 1
+fi
 
 if [ "$REDIRECTION_LOGS" = "TRUE" ]
 then

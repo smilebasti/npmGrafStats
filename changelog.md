@@ -1,13 +1,17 @@
 # Changelog
 
-### Todo list
-- Get lenght and device
-- add Status code (see #53 thanks @gitwasi)
-- add status code to Grafana
-
 ### Not planned features
-- maybe analys fallback/default/error logs
+- maybe analyse fallback/default/error logs
 - grafan 10.1 missle map (route feature only one and not multiple possible)
+- Get device
+
+## v3.0.0
+- internal ipv6 (see #56 thanks @priyankub)
+- cache abuseipdb (see #56 thanks @priyankub) !Cache can corrupt if write is interupted. Run docker compose down before directly running docker compose up after pull!
+- add status code (see #53 thanks @gitwasi)
+- added lenght (transferd bytes)
+- added option to read Influx token and Abuseipdb key from a file (see #52 thanks @emerick-biron)
+- updated Grafana Dashboard
 
 ## v2.4.3
 - make dockerfiles multi stage builds
