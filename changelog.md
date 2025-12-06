@@ -5,6 +5,9 @@
 - grafan 10.1 missle map (route feature only one and not multiple possible)
 - Get device
 
+## v3.0.1
+- fix grafana dashboard
+
 ## v3.0.0
 - internal ipv6 (see #56 thanks @priyankub)
 - cache abuseipdb (see #56 thanks @priyankub) !Cache can corrupt if write is interupted. Run docker compose down before directly running docker compose up after pull!
