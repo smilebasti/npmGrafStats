@@ -1,1714 +1,1613 @@
 {
-  "apiVersion": "dashboard.grafana.app/v2beta1",
-  "kind": "Dashboard",
-  "metadata": {
-    "name": "pvWDTV_MW1",
-    "generation": 32,
-    "creationTimestamp": "2023-12-10T11:17:57Z",
-    "labels": {},
-    "annotations": {}
-  },
-  "spec": {
-    "annotations": [
+  "__inputs": [
+    {
+      "name": "DS_INFLUXDB2-NPMGRAFSTATS",
+      "label": "InfluxDB2-npmgrafstats",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "bargauge",
+      "name": "Bar gauge",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "geomap",
+      "name": "Geomap",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "12.3.0"
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "piechart",
+      "name": "Pie chart",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
       {
-        "kind": "AnnotationQuery",
-        "spec": {
-          "builtIn": true,
-          "enable": true,
-          "hide": true,
-          "iconColor": "rgba(0, 211, 255, 1)",
-          "name": "Annotations & Alerts",
-          "query": {
-            "group": "grafana",
-            "kind": "DataQuery",
-            "spec": {
-              "limit": 100,
-              "matchAny": false,
-              "tags": [],
-              "type": "dashboard"
-            },
-            "version": "v0"
-          }
-        }
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
       }
-    ],
-    "cursorSync": "Off",
-    "description": "npmGrafStats Map Dashboard with InfluxDB powered by https://github.com/smilebasti/npmGrafStats.\n\nFor a Dashboard with the filtering option use https://grafana.com/grafana/dashboards/18826.",
-    "editable": true,
-    "elements": {
-      "panel-11": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "groupBy": [
-                          {
-                            "params": [
-                              "Domain"
-                            ],
-                            "type": "tag"
-                          }
-                        ],
-                        "measurement": "ReverseProxyConnections",
-                        "orderByTime": "ASC",
-                        "policy": "default",
-                        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"Domain\")\r\n  |> group(columns: [\"Domain\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n",
-                        "resultFormat": "table",
-                        "select": [
-                          [
-                            {
-                              "params": [
-                                "Domain"
-                              ],
-                              "type": "field"
-                            },
-                            {
-                              "params": [],
-                              "type": "count"
-                            }
-                          ]
-                        ],
-                        "tags": []
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "(without monitoring services or internal calls)",
-          "id": 11,
-          "links": [],
-          "title": "All real Accessed Domains",
-          "vizConfig": {
-            "group": "bargauge",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "continuous-GrYlRd"
-                  },
-                  "displayName": "${__field.labels.__values}",
-                  "noValue": "No Domain called",
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  }
-                },
-                "overrides": []
-              },
-              "options": {
-                "displayMode": "lcd",
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
-                },
-                "maxVizHeight": 300,
-                "minVizHeight": 10,
-                "minVizWidth": 0,
-                "namePlacement": "auto",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "limit": 100,
-                  "values": true
-                },
-                "showUnfilled": true,
-                "sizing": "auto",
-                "valueMode": "color"
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-24": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "alias": "",
-                        "groupBy": [
-                          {
-                            "params": [
-                              "name"
-                            ],
-                            "type": "tag"
-                          }
-                        ],
-                        "measurement": "ReverseProxyConnections",
-                        "orderByTime": "ASC",
-                        "policy": "default",
-                        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"Name\")\r\n  |> group(columns: [\"Name\"])\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n  |> count()",
-                        "resultFormat": "table",
-                        "select": [
-                          [
-                            {
-                              "params": [
-                                "name"
-                              ],
-                              "type": "field"
-                            },
-                            {
-                              "params": [],
-                              "type": "count"
-                            }
-                          ]
-                        ],
-                        "tags": [],
-                        "tz": ""
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "(without monitoring services or internal calls)",
-          "id": 24,
-          "links": [],
-          "title": "Hits per Nation",
-          "vizConfig": {
-            "group": "bargauge",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "continuous-GrYlRd"
-                  },
-                  "displayName": "${__field.labels.__values}",
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  }
-                },
-                "overrides": []
-              },
-              "options": {
-                "displayMode": "basic",
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
-                },
-                "maxVizHeight": 300,
-                "minVizHeight": 10,
-                "minVizWidth": 0,
-                "namePlacement": "auto",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                  "calcs": [],
-                  "fields": "/.*/",
-                  "limit": 220,
-                  "values": true
-                },
-                "showUnfilled": true,
-                "sizing": "auto",
-                "valueMode": "color"
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-25": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "groupBy": [
-                          {
-                            "params": [
-                              "1m"
-                            ],
-                            "type": "time"
-                          },
-                          {
-                            "params": [
-                              "null"
-                            ],
-                            "type": "fill"
-                          }
-                        ],
-                        "measurement": "ReverseProxyConnections",
-                        "orderByTime": "ASC",
-                        "policy": "default",
-                        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"IP\")\r\n  |> group(columns: [\"_count\"])\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n  |> count()",
-                        "resultFormat": "time_series",
-                        "select": [
-                          [
-                            {
-                              "params": [
-                                "IP"
-                              ],
-                              "type": "field"
-                            },
-                            {
-                              "params": [],
-                              "type": "count"
-                            }
-                          ]
-                        ],
-                        "tags": []
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {
-                "timeFrom": "5m"
-              },
-              "transformations": []
-            }
-          },
-          "description": "(without monitoring services or internal calls)",
-          "id": 25,
-          "links": [],
-          "title": "Hit's in the last ...",
-          "vizConfig": {
-            "group": "stat",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  }
-                },
-                "overrides": []
-              },
-              "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "percentChangeColorMode": "standard",
-                "reduceOptions": {
-                  "calcs": [
-                    "sum"
-                  ],
-                  "fields": "",
-                  "values": false
-                },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-26": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "groupBy": [
-                          {
-                            "params": [
-                              "IP"
-                            ],
-                            "type": "tag"
-                          }
-                        ],
-                        "measurement": "ReverseProxyConnections",
-                        "orderByTime": "ASC",
-                        "policy": "default",
-                        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"IP\")  \r\n  |> group(columns: [\"IP\"])\r\n  |> count()\r\n  |> drop(columns: [\"_start\", \"_stop\"])\r\n  |> yield(name: \"alias\")\r\n",
-                        "resultFormat": "table",
-                        "select": [
-                          [
-                            {
-                              "params": [
-                                "IP"
-                              ],
-                              "type": "field"
-                            },
-                            {
-                              "params": [],
-                              "type": "count"
-                            }
-                          ]
-                        ],
-                        "tags": []
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": [
-                {
-                  "kind": "labelsToFields",
-                  "spec": {
-                    "id": "labelsToFields",
-                    "options": {
-                      "mode": "columns"
-                    }
-                  }
-                },
-                {
-                  "kind": "merge",
-                  "spec": {
-                    "id": "merge",
-                    "options": {}
-                  }
-                },
-                {
-                  "kind": "joinByField",
-                  "spec": {
-                    "id": "joinByField",
-                    "options": {
-                      "byField": "IP",
-                      "mode": "outer"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "description": "",
-          "id": 26,
-          "links": [],
-          "title": "Hits per IP",
-          "vizConfig": {
-            "group": "table",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "custom": {
-                    "align": "center",
-                    "cellOptions": {
-                      "type": "auto"
-                    },
-                    "filterable": false,
-                    "footer": {
-                      "reducers": []
-                    },
-                    "inspect": false
-                  },
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  }
-                },
-                "overrides": [
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "_value"
-                    },
-                    "properties": [
-                      {
-                        "id": "displayName",
-                        "value": "Count"
-                      }
-                    ]
-                  }
-                ]
-              },
-              "options": {
-                "cellHeight": "sm",
-                "enablePagination": false,
-                "frameIndex": 5,
-                "showHeader": true,
-                "sortBy": [
-                  {
-                    "desc": true,
-                    "displayName": "Count"
-                  }
-                ]
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-27": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "alias": "",
-                        "groupBy": [
-                          {
-                            "params": [
-                              "1m"
-                            ],
-                            "type": "time"
-                          }
-                        ],
-                        "measurement": "ReverseProxyConnections",
-                        "orderByTime": "ASC",
-                        "policy": "default",
-                        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Domain\")\r\n  |> group(columns: [\"_measurement\", \"_field\", \"_time=1m\"])\r\n  |> aggregateWindow(every: 1m, fn: count, createEmpty: false)\r\n  |> yield(name: \"count\")\r\n\r\n\r\n",
-                        "resultFormat": "time_series",
-                        "select": [
-                          [
-                            {
-                              "params": [
-                                "Domain"
-                              ],
-                              "type": "field"
-                            },
-                            {
-                              "params": [],
-                              "type": "count"
-                            },
-                            {
-                              "params": [
-                                "alias"
-                              ],
-                              "type": "alias"
-                            }
-                          ]
-                        ],
-                        "tags": [],
-                        "tz": ""
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 27,
-          "links": [],
-          "title": "Hits per 1 min",
-          "vizConfig": {
-            "group": "timeseries",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "fixedColor": "yellow",
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "barAlignment": 0,
-                    "barWidthFactor": 0.6,
-                    "drawStyle": "line",
-                    "fillOpacity": 13,
-                    "gradientMode": "opacity",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "insertNulls": false,
-                    "lineInterpolation": "linear",
-                    "lineStyle": {
-                      "fill": "solid"
-                    },
-                    "lineWidth": 1,
-                    "pointSize": 3,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "showPoints": "always",
-                    "showValues": false,
-                    "spanNulls": false,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "none"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
-                  },
-                  "thresholds": {
-                    "mode": "percentage",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "yellow",
-                        "value": 75
-                      },
-                      {
-                        "color": "dark-red",
-                        "value": 90
-                      }
-                    ]
-                  }
-                },
-                "overrides": [
-                  {
-                    "__systemRef": "hideSeriesFrom",
-                    "matcher": {
-                      "id": "byNames",
-                      "options": {
-                        "mode": "exclude",
-                        "names": [
-                          "Domain"
-                        ],
-                        "prefix": "All except:",
-                        "readOnly": true
-                      }
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.hideFrom",
-                        "value": {
-                          "legend": false,
-                          "tooltip": true,
-                          "viz": true
-                        }
-                      }
-                    ]
-                  }
-                ]
-              },
-              "options": {
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "asc"
-                }
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-31": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "groupBy": [
-                          {
-                            "params": [
-                              "Domain"
-                            ],
-                            "type": "tag"
-                          }
-                        ],
-                        "measurement": "ReverseProxyConnections",
-                        "orderByTime": "ASC",
-                        "policy": "default",
-                        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"Domain\")\r\n  |> group(columns: [\"Domain\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n",
-                        "resultFormat": "table",
-                        "select": [
-                          [
-                            {
-                              "params": [
-                                "Domain"
-                              ],
-                              "type": "field"
-                            },
-                            {
-                              "params": [],
-                              "type": "count"
-                            }
-                          ]
-                        ],
-                        "tags": []
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 31,
-          "links": [],
-          "title": "Real Reverse Proxy Domains",
-          "vizConfig": {
-            "group": "bargauge",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "continuous-GrYlRd"
-                  },
-                  "displayName": "${__field.labels.__values}",
-                  "noValue": "No Domain called",
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  }
-                },
-                "overrides": []
-              },
-              "options": {
-                "displayMode": "lcd",
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
-                },
-                "maxVizHeight": 300,
-                "minVizHeight": 10,
-                "minVizWidth": 0,
-                "namePlacement": "auto",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "limit": 100,
-                  "values": true
-                },
-                "showUnfilled": true,
-                "sizing": "auto",
-                "valueMode": "color"
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-32": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "groupBy": [
-                          {
-                            "params": [
-                              "Domain"
-                            ],
-                            "type": "tag"
-                          }
-                        ],
-                        "measurement": "ReverseProxyConnections",
-                        "orderByTime": "ASC",
-                        "policy": "default",
-                        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\")\r\n  |> filter(fn: (r) => r._field == \"Domain\")\r\n  |> group(columns: [\"Domain\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n",
-                        "resultFormat": "table",
-                        "select": [
-                          [
-                            {
-                              "params": [
-                                "Domain"
-                              ],
-                              "type": "field"
-                            },
-                            {
-                              "params": [],
-                              "type": "count"
-                            }
-                          ]
-                        ],
-                        "tags": []
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 32,
-          "links": [],
-          "title": "Real Redirection Domains",
-          "vizConfig": {
-            "group": "bargauge",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "continuous-GrYlRd"
-                  },
-                  "displayName": "${__field.labels.__values}",
-                  "noValue": "No Redirect Domain called",
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  }
-                },
-                "overrides": []
-              },
-              "options": {
-                "displayMode": "lcd",
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
-                },
-                "maxVizHeight": 300,
-                "minVizHeight": 10,
-                "minVizWidth": 0,
-                "namePlacement": "auto",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "limit": 50,
-                  "values": true
-                },
-                "showUnfilled": true,
-                "sizing": "auto",
-                "valueMode": "color"
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-33": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "groupBy": [
-                          {
-                            "params": [
-                              "latitude"
-                            ],
-                            "type": "tag"
-                          },
-                          {
-                            "params": [
-                              "longitude"
-                            ],
-                            "type": "tag"
-                          },
-                          {
-                            "params": [
-                              "IP"
-                            ],
-                            "type": "tag"
-                          }
-                        ],
-                        "measurement": "ReverseProxyConnections",
-                        "orderByTime": "ASC",
-                        "policy": "default",
-                        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"IP\")  \r\n  |> group(columns: [\"longitude\",\"latitude\",\"IP\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n\r\n",
-                        "resultFormat": "table",
-                        "select": [
-                          [
-                            {
-                              "params": [
-                                "IP"
-                              ],
-                              "type": "field"
-                            },
-                            {
-                              "params": [],
-                              "type": "count"
-                            },
-                            {
-                              "params": [
-                                "counts"
-                              ],
-                              "type": "alias"
-                            }
-                          ]
-                        ],
-                        "tags": []
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {
-                "maxDataPoints": 1
-              },
-              "transformations": [
-                {
-                  "kind": "labelsToFields",
-                  "spec": {
-                    "id": "labelsToFields",
-                    "options": {}
-                  }
-                },
-                {
-                  "kind": "merge",
-                  "spec": {
-                    "id": "merge",
-                    "options": {}
-                  }
-                },
-                {
-                  "kind": "joinByField",
-                  "spec": {
-                    "id": "joinByField",
-                    "options": {
-                      "byField": "IP",
-                      "mode": "outer"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "description": "",
-          "id": 33,
-          "links": [],
-          "title": "Real IPs Map Overview (without excluded IPs)",
-          "vizConfig": {
-            "group": "geomap",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "fixedColor": "#c94141",
-                    "mode": "thresholds"
-                  },
-                  "custom": {
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    }
-                  },
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "semi-dark-red",
-                        "value": 0
-                      },
-                      {
-                        "color": "semi-dark-yellow",
-                        "value": 4
-                      },
-                      {
-                        "color": "#3ce126",
-                        "value": 10
-                      }
-                    ]
-                  },
-                  "unit": "none"
-                },
-                "overrides": [
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "_value"
-                    },
-                    "properties": [
-                      {
-                        "id": "displayName",
-                        "value": "Count"
-                      }
-                    ]
-                  }
-                ]
-              },
-              "options": {
-                "basemap": {
-                  "config": {},
-                  "name": "Layer 0",
-                  "type": "default"
-                },
-                "controls": {
-                  "mouseWheelZoom": true,
-                  "showAttribution": true,
-                  "showDebug": false,
-                  "showMeasure": false,
-                  "showScale": false,
-                  "showZoom": true
-                },
-                "layers": [
-                  {
-                    "config": {
-                      "showLegend": true,
-                      "style": {
-                        "color": {
-                          "field": "_value",
-                          "fixed": "dark-green"
-                        },
-                        "opacity": 0.6,
-                        "rotation": {
-                          "field": "_value",
-                          "fixed": 0,
-                          "max": 360,
-                          "min": -360,
-                          "mode": "mod"
-                        },
-                        "size": {
-                          "field": "_value",
-                          "fixed": 5,
-                          "max": 14,
-                          "min": 2
-                        },
-                        "symbol": {
-                          "fixed": "img/icons/marker/circle.svg",
-                          "mode": "fixed"
-                        },
-                        "text": {
-                          "fixed": "",
-                          "mode": "field"
-                        },
-                        "textConfig": {
-                          "fontSize": 12,
-                          "offsetX": 0,
-                          "offsetY": 0,
-                          "textAlign": "center",
-                          "textBaseline": "middle"
-                        }
-                      }
-                    },
-                    "location": {
-                      "mode": "auto"
-                    },
-                    "name": "IP count",
-                    "tooltip": true,
-                    "type": "markers"
-                  }
-                ],
-                "tooltip": {
-                  "mode": "details"
-                },
-                "view": {
-                  "allLayers": true,
-                  "id": "fit",
-                  "lat": 0,
-                  "lon": 0,
-                  "noRepeat": false,
-                  "zoom": 14.94
-                }
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-38": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Asn\")  \r\n  |> group(columns: [\"Asn\", \"IP\"])\r\n  |> count()\r\n  |> drop(columns: [\"_start\", \"_stop\"])\r\n  |> yield(name: \"alias\")"
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": [
-                {
-                  "kind": "labelsToFields",
-                  "spec": {
-                    "id": "labelsToFields",
-                    "options": {}
-                  }
-                },
-                {
-                  "kind": "merge",
-                  "spec": {
-                    "id": "merge",
-                    "options": {}
-                  }
-                }
-              ]
-            }
-          },
-          "description": "",
-          "id": 38,
-          "links": [],
-          "title": "ASN (per IP)",
-          "vizConfig": {
-            "group": "table",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "custom": {
-                    "align": "center",
-                    "cellOptions": {
-                      "type": "auto"
-                    },
-                    "footer": {
-                      "reducers": []
-                    },
-                    "inspect": false
-                  },
-                  "displayName": "${__field.labels.__values}",
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  }
-                },
-                "overrides": [
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "_value"
-                    },
-                    "properties": [
-                      {
-                        "id": "displayName",
-                        "value": "Count"
-                      }
-                    ]
-                  }
-                ]
-              },
-              "options": {
-                "cellHeight": "sm",
-                "frameIndex": 1,
-                "showHeader": true,
-                "sortBy": [
-                  {
-                    "desc": true,
-                    "displayName": "Count"
-                  }
-                ]
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-39": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Asn\")  \r\n  |> group(columns: [\"Asn\"])\r\n  |> count()\r\n  |> drop(columns: [\"_start\", \"_stop\"])\r\n  |> yield(name: \"alias\")"
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": [
-                {
-                  "kind": "labelsToFields",
-                  "spec": {
-                    "id": "labelsToFields",
-                    "options": {}
-                  }
-                },
-                {
-                  "kind": "merge",
-                  "spec": {
-                    "id": "merge",
-                    "options": {}
-                  }
-                }
-              ]
-            }
-          },
-          "description": "",
-          "id": 39,
-          "links": [],
-          "title": "ASN",
-          "vizConfig": {
-            "group": "table",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "custom": {
-                    "align": "center",
-                    "cellOptions": {
-                      "type": "auto"
-                    },
-                    "footer": {
-                      "reducers": []
-                    },
-                    "inspect": false
-                  },
-                  "displayName": "${__field.labels.__values}",
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  }
-                },
-                "overrides": [
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "_value"
-                    },
-                    "properties": [
-                      {
-                        "id": "displayName",
-                        "value": "Count"
-                      }
-                    ]
-                  }
-                ]
-              },
-              "options": {
-                "cellHeight": "sm",
-                "frameIndex": 1,
-                "showHeader": true,
-                "sortBy": [
-                  {
-                    "desc": true,
-                    "displayName": "Count"
-                  }
-                ]
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-41": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 41,
-          "links": [],
-          "title": "Info",
-          "vizConfig": {
-            "group": "text",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {},
-                "overrides": []
-              },
-              "options": {
-                "code": {
-                  "language": "plaintext",
-                  "showLineNumbers": false,
-                  "showMiniMap": false
-                },
-                "content": "# For speed optimization\n\nFor speed optimization the addtional Panels were removed in v3+\n\n### How to see more:\nEither copy or edit the current Panels directly.\nLook into the Influx code and:\n- remove all filters \n- add MonitoringIPs\n- add Internal IPs",
-                "mode": "markdown"
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-42": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "query": "from(bucket: v.defaultBucket)\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\n  |> filter(fn: (r) => r[\"_field\"] == \"length\")\n  |> group(columns: [\"Domain\"])\n  |> sum()\n  |> group()\n  |> sort(desc: true)\n  |> limit(n: 10)\n  \n  "
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 42,
-          "links": [],
-          "title": "Data (lenght) transmitted per Domain (Top 10)",
-          "vizConfig": {
-            "group": "bargauge",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "thresholds": {
-                    "mode": "percentage",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  },
-                  "unit": "decbytes"
-                },
-                "overrides": []
-              },
-              "options": {
-                "displayMode": "gradient",
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
-                },
-                "maxVizHeight": 300,
-                "minVizHeight": 16,
-                "minVizWidth": 8,
-                "namePlacement": "auto",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                  "calcs": [
-                    "allValues"
-                  ],
-                  "fields": "",
-                  "limit": 10,
-                  "values": true
-                },
-                "showUnfilled": true,
-                "sizing": "auto",
-                "valueMode": "color"
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-43": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "query": "from(bucket: v.defaultBucket)\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\n  |> filter(fn: (r) => r[\"_field\"] == \"statuscode\")\n  |> duplicate(column: \"_value\", as: \"new_column\")\n  |> group(columns: [\"new_column\"])\n  |> count()\n  |> yield(name: \"alias\")"
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": " ",
-          "id": 43,
-          "links": [],
-          "title": "Statuscode distribution",
-          "vizConfig": {
-            "group": "piechart",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    }
-                  },
-                  "displayName": "${__field.labels.__values}",
-                  "unit": "none"
-                },
-                "overrides": []
-              },
-              "options": {
-                "displayLabels": [
-                  "name"
-                ],
-                "legend": {
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true,
-                  "values": [
-                    "percent"
-                  ]
-                },
-                "pieType": "pie",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-                },
-                "sort": "desc",
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      },
-      "panel-44": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "influxdb",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "query": "from(bucket: v.defaultBucket)\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\n  |> filter(fn: (r) => r[\"_field\"] == \"abuseConfidenceScore\")\n  |> group(columns: [\"_measurement\", \"abuseConfidenceScore\"])\n  |> count()\n  |> drop(columns: [\"_start\", \"_stop\"])"
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 44,
-          "links": [],
-          "title": "AbuseIpDB Confidence Score",
-          "vizConfig": {
-            "group": "piechart",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    }
-                  },
-                  "displayName": "score: ${__field.labels.__values}"
-                },
-                "overrides": []
-              },
-              "options": {
-                "displayLabels": [
-                  "name"
-                ],
-                "legend": {
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true,
-                  "values": [
-                    "percent"
-                  ]
-                },
-                "pieType": "pie",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-                },
-                "sort": "desc",
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
-              }
-            },
-            "version": "12.2.1"
-          }
-        }
-      }
-    },
-    "layout": {
-      "kind": "GridLayout",
-      "spec": {
-        "items": []
-      }
-    },
-    "links": [],
-    "liveNow": false,
-    "preload": false,
-    "tags": [],
-    "timeSettings": {
-      "autoRefresh": "15s",
-      "autoRefreshIntervals": [
-        "5s",
-        "10s",
-        "15s",
-        "30s",
-        "1m",
-        "5m",
-        "15m",
-        "30m",
-        "1h",
-        "2h",
-        "1d"
-      ],
-      "fiscalYearStartMonth": 0,
-      "from": "now-6h",
-      "hideTimepicker": false,
-      "timezone": "",
-      "to": "now"
-    },
-    "title": "npmGrafStats Map Dashboard v3.0+ InfluxDBv2 NO filter",
-    "variables": []
+    ]
   },
-  "status": {}
+  "description": "npmGrafStats Map Dashboard with InfluxDB powered by https://github.com/smilebasti/npmGrafStats.\n\nFor a Dashboard with the filtering option use https://grafana.com/grafana/dashboards/18826.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 23,
+      "panels": [],
+      "title": "Real Connections (without monitoring services or internal calls)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "description": "(without monitoring services or internal calls)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "displayName": "${__field.labels.__values}",
+          "mappings": [],
+          "noValue": "No Domain called",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 11,
+      "options": {
+        "displayMode": "lcd",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 100,
+          "values": true
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "Domain"
+              ],
+              "type": "tag"
+            }
+          ],
+          "measurement": "ReverseProxyConnections",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"Domain\")\r\n  |> group(columns: [\"Domain\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "Domain"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "All real Accessed Domains",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Count"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 7,
+        "x": 0,
+        "y": 18
+      },
+      "id": 26,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": false,
+        "frameIndex": 5,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Count"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "IP"
+              ],
+              "type": "tag"
+            }
+          ],
+          "measurement": "ReverseProxyConnections",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"IP\")  \r\n  |> group(columns: [\"IP\"])\r\n  |> count()\r\n  |> drop(columns: [\"_start\", \"_stop\"])\r\n  |> yield(name: \"alias\")\r\n",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "IP"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Hits per IP",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "IP",
+            "mode": "outer"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "description": "(without monitoring services or internal calls)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 7,
+        "y": 18
+      },
+      "id": 25,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1m"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "ReverseProxyConnections",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"IP\")\r\n  |> group(columns: [\"_count\"])\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n  |> count()",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "IP"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "timeFrom": "5m",
+      "title": "Hit's in the last ...",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "description": "(without monitoring services or internal calls)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "displayName": "${__field.labels.__values}",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 22,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 24,
+      "options": {
+        "displayMode": "basic",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "/.*/",
+          "limit": 220,
+          "values": true
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "alias": "",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "name"
+              ],
+              "type": "tag"
+            }
+          ],
+          "measurement": "ReverseProxyConnections",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"Name\")\r\n  |> group(columns: [\"Name\"])\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n  |> count()",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "name"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              }
+            ]
+          ],
+          "tags": [],
+          "tz": ""
+        }
+      ],
+      "title": "Hits per Nation",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "yellow",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 13,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "dark-red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "Domain"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 0,
+        "y": 26
+      },
+      "id": 27,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "asc"
+        }
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "alias": "",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1m"
+              ],
+              "type": "time"
+            }
+          ],
+          "measurement": "ReverseProxyConnections",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Domain\")\r\n  |> group(columns: [\"_measurement\", \"_field\", \"_time=1m\"])\r\n  |> aggregateWindow(every: 1m, fn: count, createEmpty: false)\r\n  |> yield(name: \"count\")\r\n\r\n\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "Domain"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              },
+              {
+                "params": [
+                  "alias"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [],
+          "tz": ""
+        }
+      ],
+      "title": "Hits per 1 min",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "displayName": "${__field.labels.__values}",
+          "mappings": [],
+          "noValue": "No Domain called",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 40
+      },
+      "id": 31,
+      "options": {
+        "displayMode": "lcd",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 100,
+          "values": true
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "Domain"
+              ],
+              "type": "tag"
+            }
+          ],
+          "measurement": "ReverseProxyConnections",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"Domain\")\r\n  |> group(columns: [\"Domain\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "Domain"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Real Reverse Proxy Domains",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "displayName": "${__field.labels.__values}",
+          "mappings": [],
+          "noValue": "No Redirect Domain called",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 40
+      },
+      "id": 32,
+      "options": {
+        "displayMode": "lcd",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 50,
+          "values": true
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "Domain"
+              ],
+              "type": "tag"
+            }
+          ],
+          "measurement": "ReverseProxyConnections",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\")\r\n  |> filter(fn: (r) => r._field == \"Domain\")\r\n  |> group(columns: [\"Domain\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "Domain"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Real Redirection Domains",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 52
+      },
+      "id": 42,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "allValues"
+          ],
+          "fields": "",
+          "limit": 10,
+          "values": true
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "query": "from(bucket: v.defaultBucket)\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\n  |> filter(fn: (r) => r[\"_field\"] == \"length\")\n  |> group(columns: [\"Domain\"])\n  |> sum()\n  |> group()\n  |> sort(desc: true)\n  |> limit(n: 10)\n  \n  ",
+          "refId": "A"
+        }
+      ],
+      "title": "Data (lenght) transmitted per Domain (Top 10)",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "description": " ",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "displayName": "${__field.labels.__values}",
+          "mappings": [],
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 52
+      },
+      "id": 43,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "query": "from(bucket: v.defaultBucket)\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\n  |> filter(fn: (r) => r[\"_field\"] == \"statuscode\")\n  |> duplicate(column: \"_value\", as: \"new_column\")\n  |> group(columns: [\"new_column\"])\n  |> count()\n  |> yield(name: \"alias\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Statuscode distribution",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "displayName": "score: ${__field.labels.__values}",
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 52
+      },
+      "id": 44,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "query": "from(bucket: v.defaultBucket)\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\n  |> filter(fn: (r) => r[\"_field\"] == \"abuseConfidenceScore\")\n  |> group(columns: [\"_measurement\", \"abuseConfidenceScore\"])\n  |> count()\n  |> drop(columns: [\"_start\", \"_stop\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "AbuseIpDB Confidence Score",
+      "type": "piechart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 60
+      },
+      "id": 19,
+      "panels": [],
+      "title": "World Map",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#c94141",
+            "mode": "thresholds"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-red",
+                "value": 0
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 4
+              },
+              {
+                "color": "#3ce126",
+                "value": 10
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Count"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 21,
+        "w": 24,
+        "x": 0,
+        "y": 61
+      },
+      "id": 33,
+      "maxDataPoints": 1,
+      "options": {
+        "basemap": {
+          "config": {},
+          "name": "Layer 0",
+          "noRepeat": false,
+          "type": "default"
+        },
+        "controls": {
+          "mouseWheelZoom": true,
+          "showAttribution": true,
+          "showDebug": false,
+          "showMeasure": false,
+          "showScale": false,
+          "showZoom": true
+        },
+        "layers": [
+          {
+            "config": {
+              "showLegend": true,
+              "style": {
+                "color": {
+                  "field": "_value",
+                  "fixed": "dark-green"
+                },
+                "opacity": 0.9,
+                "rotation": {
+                  "field": "_value",
+                  "fixed": 0,
+                  "max": 360,
+                  "min": -360,
+                  "mode": "mod"
+                },
+                "size": {
+                  "field": "_value",
+                  "fixed": 5,
+                  "max": 14,
+                  "min": 2
+                },
+                "symbol": {
+                  "fixed": "img/icons/marker/circle.svg",
+                  "mode": "fixed"
+                },
+                "text": {
+                  "fixed": "",
+                  "mode": "field"
+                },
+                "textConfig": {
+                  "fontSize": 12,
+                  "offsetX": 0,
+                  "offsetY": 0,
+                  "textAlign": "center",
+                  "textBaseline": "middle"
+                }
+              }
+            },
+            "location": {
+              "mode": "auto"
+            },
+            "name": "IP count",
+            "tooltip": true,
+            "type": "markers"
+          }
+        ],
+        "tooltip": {
+          "mode": "details"
+        },
+        "view": {
+          "allLayers": true,
+          "id": "fit",
+          "lat": 0,
+          "lon": 0,
+          "noRepeat": false,
+          "zoom": 14.94
+        }
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "latitude"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "longitude"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "IP"
+              ],
+              "type": "tag"
+            }
+          ],
+          "measurement": "ReverseProxyConnections",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r._field == \"IP\")  \r\n  |> group(columns: [\"longitude\",\"latitude\",\"IP\"])\r\n  |> count()\r\n  |> drop(columns: [\"host\", \"_field\", \"_measurement\", \"_start\", \"_stop\"])\r\n\r\n",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "IP"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              },
+              {
+                "params": [
+                  "counts"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Real IPs Map Overview (without excluded IPs)",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "IP",
+            "mode": "outer"
+          }
+        }
+      ],
+      "type": "geomap"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 82
+      },
+      "id": 37,
+      "panels": [],
+      "title": "ASN",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "displayName": "${__field.labels.__values}",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Count"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 83
+      },
+      "id": 39,
+      "options": {
+        "cellHeight": "sm",
+        "frameIndex": 1,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Count"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Asn\")  \r\n  |> group(columns: [\"Asn\"])\r\n  |> count()\r\n  |> drop(columns: [\"_start\", \"_stop\"])\r\n  |> yield(name: \"alias\")",
+          "refId": "A"
+        }
+      ],
+      "title": "ASN",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "displayName": "${__field.labels.__values}",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Count"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 92
+      },
+      "id": 38,
+      "options": {
+        "cellHeight": "sm",
+        "frameIndex": 1,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Count"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB2-NPMGRAFSTATS}"
+          },
+          "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Redirections\" or r[\"_measurement\"] == \"ReverseProxyConnections\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Asn\")  \r\n  |> group(columns: [\"Asn\", \"IP\"])\r\n  |> count()\r\n  |> drop(columns: [\"_start\", \"_stop\"])\r\n  |> yield(name: \"alias\")",
+          "refId": "A"
+        }
+      ],
+      "title": "ASN (per IP)",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 101
+      },
+      "id": 40,
+      "panels": [],
+      "title": "Additional Info",
+      "type": "row"
+    },
+    {
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 102
+      },
+      "id": 41,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "# For speed optimization\n\nFor speed optimization the addtional Panels were removed in v3+\n\n### How to see more:\nEither copy or edit the current Panels directly.\nLook into the Influx code and:\n- remove all filters \n- add MonitoringIPs\n- add Internal IPs",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.3.0",
+      "title": "Info",
+      "type": "text"
+    }
+  ],
+  "preload": false,
+  "refresh": "15s",
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "15s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "npmGrafStats Map Dashboard v3.0+ InfluxDBv2 NO filter",
+  "uid": "pvWDTV_MW1",
+  "version": 33,
+  "weekStart": ""
 }
