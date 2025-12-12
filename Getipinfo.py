@@ -3,7 +3,8 @@
 import sys
 import os
 import geoip2.database
-import socket 
+import socket
+import json
 import time
 import fcntl
 from datetime import datetime, timedelta
