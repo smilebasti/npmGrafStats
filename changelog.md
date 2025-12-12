@@ -5,6 +5,9 @@
 - grafana 10.1 missle map (route feature only one and not multiple possible)
 - Get device
 
+## plus-v3.0.2
+- fix json import
+
 ## plus-v3.0.1
 - fix grafana dashboard
 
