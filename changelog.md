@@ -1,9 +1,15 @@
 # Changelog
 
 ### Not planned features
-- maybe analyse fallback/default/error logs
+- analyse fallback/default/error logs
 - grafan 10.1 missle map (route feature only one and not multiple possible)
-- Get device
+
+## v3.1.0
+- add the extraction of the Browser, Browser Version and OS
+- update Grafana Dashboard to show Bowser, Browser Version and OS (still missing)
+- add Supply chain attestations with Provenance attestations
+- use non root user
+- fixes Grafana ID: With Filter 18826 and No Filter 24693
 
 ## v3.0.1
 - fix grafana dashboard

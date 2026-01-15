@@ -50,22 +50,25 @@ process_logfile(){
   # get time from logs
   measurementtime=`echo ${line:1:26} `
 
+  # Extract User-Agent
+  useragent=`echo $line | grep -oP '\[Sent-to [^]]+\] "\K[^"]+'`
+
   if [[ $outsideip =~ $internalips ]] || [[ $outsideip =~ $externalip ]]
   then
     echo "Internal IP-Source: $outsideip called: $targetdomain"
     if [ "$INTERNAL_LOGS" = "TRUE" ]
     then
-      python /root/.config/NPMGRAF/Internalipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "InternalRProxyIPs" "$measurementtime" "$statuscode"
+      python /home/appuser/.config/NPMGRAF/Internalipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "InternalRProxyIPs" "$measurementtime" "$statuscode" "$useragent"
     fi
   elif [[ $monitorfile ]] && grepcidr -D $outsideip $MONITOR_FILE_PATH >> /dev/null
   then
     echo "An excluded monitoring service checked: $targetdomain"
     if [ "$MONITORING_LOGS" = "TRUE" ]
     then
-      python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "MonitoringRProxyIPs" "$measurementtime" "$asndb" "$statuscode"
+      python /home/appuser/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "MonitoringRProxyIPs" "$measurementtime" "$asndb" "$statuscode" "$useragent"
     fi
-  else      
-    python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "ReverseProxyConnections" "$measurementtime" "$asndb" "$statuscode"
+  else
+    python /home/appuser/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "$targetip" "ReverseProxyConnections" "$measurementtime" "$asndb" "$statuscode" "$useragent"
   fi
 done
 }

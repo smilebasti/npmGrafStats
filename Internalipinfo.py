@@ -7,6 +7,7 @@ import time
 from datetime import datetime, timedelta
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
+from ua_parser import user_agent_parser
 
 print ('**************** start *********************')
 measurement_name = (sys.argv[5]) # get measurement from argv
@@ -16,25 +17,37 @@ print ('Measurement-name: '+measurement_name)
 DATA_DIR = "/data"
 INFLUX_TOKEN_FILE = os.path.join(DATA_DIR, "influxdb-token.txt")
 
-# argv[1] = outsideip, agrv[2] = Domain, argv[3] length, argv[4] tragetip, sys.argv[5] bucketname, sys.argv[6] date, sys.argv[7] statuscode
+# argv[1] = outsideip, agrv[2] = Domain, argv[3] length, argv[4] tragetip, sys.argv[5] bucketname, sys.argv[6] date, sys.argv[7] statuscode, sys.argv[8] useragent
 IP = str(sys.argv[1])
 Domain = str(sys.argv[2])
 length = int(sys.argv[3])
 Target = str(sys.argv[4])
 statuscode = int(sys.argv[7])
+useragent = str(sys.argv[8])
+
+# Parse User-Agent
+parsed_ua = user_agent_parser.Parse(useragent)
+browser = parsed_ua['user_agent']['family'] or 'Unknown'
+browser_only_version = parsed_ua['user_agent']['major'] or '0'
+browser_version = browser + ": " + browser_only_version
+if parsed_ua['user_agent']['minor']:
+    browser_version += '.' + parsed_ua['user_agent']['minor']
+os_family = parsed_ua['os']['family'] or 'Unknown'
 
 # print to log
 print ('Calling IP: ', IP)
 print ('Target IP: ', Target)
 print ('Domain: ', Domain)
 print ('Statuscode ', statuscode)
+print("Browser Version:", browser_version)
+print("OS Family:", os_family)
 
 ## get env vars and use
-# influx configuration - edit these
-npmhome = "/root/.config/NPMGRAF"
+
 ifhost = os.getenv('INFLUX_HOST')
 ifbucket = os.getenv('INFLUX_BUCKET')
 iforg    = os.getenv('INFLUX_ORG')
+
 if os.getenv('INFLUX_TOKEN') is not None:
     iftoken  = os.getenv('INFLUX_TOKEN')
 elif os.path.exists(INFLUX_TOKEN_FILE):
@@ -71,6 +84,9 @@ point.tag("Target", Target)
 point.field("Domain", Domain)
 point.field("IP", IP)
 point.field("Target", Target)
+point.field("browser", browser)
+point.field("browser_version", browser_version)
+point.field("os", os_family)
 point.field("length", length)
 point.field("statuscode", statuscode)
 point.field("metric", 1)

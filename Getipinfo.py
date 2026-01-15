@@ -10,12 +10,13 @@ import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
 import time
 from datetime import datetime, timedelta
+from ua_parser import user_agent_parser
 
 print ('**************** start *********************')
 measurement_name = (sys.argv[5]) # get measurement from argv
 print ('Measurement-name: '+measurement_name) 
 
-# argv[1] = outsideip, agrv[2] = Domain, argv[3] length, argv[4] tragetip, sys.argv[5] bucketname, sys.argv[6] date, sys.argv[7] asn, sys.argv[8] statuscode
+# argv[1] = outsideip, agrv[2] = Domain, argv[3] length, argv[4] tragetip, sys.argv[5] bucketname, sys.argv[6] date, sys.argv[7] asn, sys.argv[8] statuscode, sys.argv[9] useragent
 
 # Configuration for Persistent Data
 DATA_DIR = "/data"
@@ -137,6 +138,7 @@ Domain = str(sys.argv[2])
 length = int(sys.argv[3])
 Target = str(sys.argv[4])
 statuscode = int(sys.argv[8])
+useragent = str(sys.argv[9])
 reader.close()
 
 asn = str(sys.argv[7])
@@ -151,6 +153,15 @@ if asn == 'true':
         Asn = f"An error occurred: {e}"
     finally:
         reader.close()
+
+# Parse User-Agent
+parsed_ua = user_agent_parser.Parse(useragent)
+browser = parsed_ua['user_agent']['family'] or 'Unknown'
+browser_only_version = parsed_ua['user_agent']['major'] or '0'
+browser_version = browser + ": " + browser_only_version
+if parsed_ua['user_agent']['minor']:
+    browser_version += '.' + parsed_ua['user_agent']['minor']
+os_family = parsed_ua['os']['family'] or 'Unknown'
 
 # print to log
 print (Country)
@@ -169,9 +180,9 @@ print ('Statuscode ', statuscode)
 if abuseip_key:
     print("abuseConfidenceScore: " + abuseConfidenceScore)
     print("totalReports: " + totalReports)
+print("Browser Version:", browser_version)
+print("OS Family:", os_family)
 
-# influx configuration - edit these
-npmhome = "/root/.config/NPMGRAF"
 ifhost = os.getenv('INFLUX_HOST')
 ifbucket = os.getenv('INFLUX_BUCKET')
 iforg    = os.getenv('INFLUX_ORG')
@@ -228,6 +239,9 @@ point.field("City", City)
 point.field("key", ISO)
 point.field("IP", IP)
 point.field("Target", Target)
+point.field("browser", browser)
+point.field("browser_version", browser_version)
+point.field("os", os_family)
 if asn =='true':
     point.field("Asn", Asn)
 point.field("Name", Country)
