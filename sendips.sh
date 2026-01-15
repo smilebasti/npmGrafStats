@@ -43,8 +43,11 @@ do
   # get time from logs
   measurementtime=`echo ${line:1:26} `
 
-  # length bytes transferd 
+  # length bytes transferd
   length=`echo $line | cut -d' ' -f11`
+
+  # Extract User-Agent
+  useragent=`echo $line | cut -d' ' -f13-`
 
   if [[ $outsideip == "127.0.0.1" ]]
   then
@@ -54,17 +57,17 @@ do
     echo "Internal IP-Source: $outsideip called: $targetdomain"
     if [ "$INTERNAL_LOGS" = "TRUE" ]
     then
-      python /root/.config/NPMGRAF/Internalipinfo.py "$outsideip" "$targetdomain" "$length" "InternalRProxyIPs" "$measurementtime" "$statuscode"
+      python /root/.config/NPMGRAF/Internalipinfo.py "$outsideip" "$targetdomain" "$length" "InternalRProxyIPs" "$measurementtime" "$statuscode" "$useragent"
     fi
   elif $monitorfile && grepcidr -D $outsideip $MONITOR_FILE_PATH >> /dev/null
   then
     echo "An excluded monitoring service checked: $targetdomain"
     if [ "$MONITORING_LOGS" = "TRUE" ]
     then
-      python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "MonitoringRProxyIPs" "$measurementtime" "$asndb" "$statuscode"
+      python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "MonitoringRProxyIPs" "$measurementtime" "$asndb" "$statuscode" "$useragent"
     fi
   else      
-    python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "ReverseProxyConnections" "$measurementtime" "$asndb" "$statuscode"
+    python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "ReverseProxyConnections" "$measurementtime" "$asndb" "$statuscode" "$useragent"
   fi
 done
 }

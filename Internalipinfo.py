@@ -7,6 +7,7 @@ import time
 from datetime import datetime, timedelta
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
+from ua_parser import user_agent_parser
 
 print ('**************** start plus *********************')
 measurement_name = (sys.argv[4]) # get measurement from argv
@@ -16,16 +17,28 @@ print ('Measurement-name: '+measurement_name)
 DATA_DIR = "/data"
 INFLUX_TOKEN_FILE = os.path.join(DATA_DIR, "influxdb-token.txt")
 
-# argv[1] = outsideip, agrv[2] = Domain, argv[3] length , argv[4] measurementname, argv[5] time, sys.argv[6] statuscode
+# argv[1] = outsideip, agrv[2] = Domain, argv[3] length , argv[4] measurementname, argv[5] time, sys.argv[6] statuscode, sys.argv[7] useragent
 IP = str(sys.argv[1])
 Domain = str(sys.argv[2])
 length = int(sys.argv[3])
 statuscode = int(sys.argv[6])
+useragent = str(sys.argv[7])
+
+# Parse User-Agent
+parsed_ua = user_agent_parser.Parse(useragent)
+browser = parsed_ua['user_agent']['family'] or 'Unknown'
+browser_only_version = parsed_ua['user_agent']['major'] or '0'
+browser_version = browser + ": " + browser_only_version
+if parsed_ua['user_agent']['minor']:
+    browser_version += '.' + parsed_ua['user_agent']['minor']
+os_family = parsed_ua['os']['family'] or 'Unknown'
 
 # print to log
 print ('Calling IP: ', IP)
 print ('Domain: ', Domain)
 print ('Statuscode ', statuscode)
+print("Browser Version:", browser_version)
+print("OS Family:", os_family)
 
 ## get env vars and use
 # influx configuration - edit these
@@ -71,6 +84,9 @@ point.field("IP", IP)
 point.field("length", length)
 point.field("statuscode", statuscode)
 point.field("metric", 1)
+point.field("browser", browser)
+point.field("browser_version", browser_version)
+point.field("os", os_family)
 
 point.time(time_str)
 

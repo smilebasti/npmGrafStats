@@ -10,12 +10,13 @@ import fcntl
 from datetime import datetime, timedelta
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
+from ua_parser import user_agent_parser
 
 print ('**************** start plus *********************')
 measurement_name = (sys.argv[4]) # get measurement from argv
 print ('Measurement-name: '+measurement_name) 
 
-# argv[1[] = outsideip, agrv[2] = Domain, argv[3] length,  sys.argv[4] bucketname, sys.argv[5] date, sys.argv[6] asn, sys.argv[7] statuscode
+# argv[1[] = outsideip, agrv[2] = Domain, argv[3] length,  sys.argv[4] bucketname, sys.argv[5] date, sys.argv[6] asn, sys.argv[7] statuscode, sys.argv[8] useragent
 
 # Configuration for Persistent Data
 DATA_DIR = "/data"
@@ -125,18 +126,29 @@ State = response.subdivisions.most_specific.name
 City = response.city.name
 Country = response.country.name
 Zip = response.postal.code
+reader.close()
+
 IP = str(sys.argv[1])
 Domain = str(sys.argv[2])
 length = int(sys.argv[3])
 statuscode = int(sys.argv[7])
-reader.close()
-
+useragent = str(sys.argv[8])
 asn = str(sys.argv[6])
+
 if asn =='true':
     reader = geoip2.database.Reader('/geolite/GeoLite2-ASN.mmdb')
     response = reader.asn(str(sys.argv[1]))
     Asn = response.autonomous_system_organization
     reader.close()
+
+# Parse User-Agent
+parsed_ua = user_agent_parser.Parse(useragent)
+browser = parsed_ua['user_agent']['family'] or 'Unknown'
+browser_only_version = parsed_ua['user_agent']['major'] or '0'
+browser_version = browser + ": " + browser_only_version
+if parsed_ua['user_agent']['minor']:
+    browser_version += '.' + parsed_ua['user_agent']['minor']
+os_family = parsed_ua['os']['family'] or 'Unknown'
 
 # print to log
 print (Country)
@@ -154,6 +166,8 @@ print ('Statuscode ', statuscode)
 if abuseip_key:
     print("abuseConfidenceScore: " + abuseConfidenceScore)
     print("totalReports: " + totalReports)
+print("Browser Version:", browser_version)
+print("OS Family:", os_family)
 
 # influx configuration - edit these
 npmhome = "/root/.config/NPMGRAF"
@@ -219,6 +233,9 @@ point.field("metric", 1)
 if abuseip_key:
     point.field("abuseConfidenceScore", abuseConfidenceScore)
     point.field("totalReports", totalReports)
+point.field("browser", browser)
+point.field("browser_version", browser_version)
+point.field("os", os_family)
 
 point.time(time_str)
 

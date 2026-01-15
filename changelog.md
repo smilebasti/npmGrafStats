@@ -1,9 +1,15 @@
 # Changelog npmPlus
 
 ### Not planned features
-- maybe analyse fallback/default/error logs
+- analyse fallback/default/error logs
 - grafana 10.1 missle map (route feature only one and not multiple possible)
-- Get device
+
+## plus-v3.1.0
+- add the extraction of the Browser, Browser Version and OS
+- update Grafana Dashboard to show Bowser, Browser Version and OS (still missing)
+- add Supply chain attestations with Provenance attestations
+- use non root user in docker image
+- fixes Grafana ID: With Filter 18826 and No Filter 24693
 
 ## plus-v3.0.2
 - fix json import
