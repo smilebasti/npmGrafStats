@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "npmGrafStats: v3.1.0-pre"
+echo "npmGrafStats: v3.1.1-pre"
 echo "Startup: lets get the logs send them to influx"
 
 if [ -z "$INFLUX_TOKEN" ] && [ ! -f "/data/influxdb-token.txt" ]; then

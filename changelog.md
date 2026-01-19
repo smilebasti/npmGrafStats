@@ -4,6 +4,11 @@
 - analyse fallback/default/error logs
 - grafan 10.1 missle map (route feature only one and not multiple possible)
 
+## v3.1.1
+- add major docker tag to avoid breacking change (ex. v3-arm)
+- cleanup ci build process and avoid seperate Docker-Arm File
+- remove arm version tags as they are not necessary for the build process anymore (latest-arm will continue)
+
 ## v3.1.0
 - add the extraction of the Browser, Browser Version and OS
 - update Grafana Dashboard to show Bowser, Browser Version and OS (still missing)
