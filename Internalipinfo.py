@@ -43,7 +43,7 @@ print("OS Family:", os_family)
 ## get env vars and use
 # influx configuration - edit these
 
-npmhome = "/root/.config/NPMGRAF"
+npmhome = "/home/appuser/.config/NPMGRAF"
 ifhost = os.getenv('INFLUX_HOST')
 ifbucket = os.getenv('INFLUX_BUCKET')
 iforg    = os.getenv('INFLUX_ORG')

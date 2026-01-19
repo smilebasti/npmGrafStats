@@ -57,17 +57,17 @@ do
     echo "Internal IP-Source: $outsideip called: $targetdomain"
     if [ "$INTERNAL_LOGS" = "TRUE" ]
     then
-      python /root/.config/NPMGRAF/Internalipinfo.py "$outsideip" "$targetdomain" "$length" "InternalRProxyIPs" "$measurementtime" "$statuscode" "$useragent"
+      python /home/appuser/.config/NPMGRAF/Internalipinfo.py "$outsideip" "$targetdomain" "$length" "InternalRProxyIPs" "$measurementtime" "$statuscode" "$useragent"
     fi
   elif $monitorfile && grepcidr -D $outsideip $MONITOR_FILE_PATH >> /dev/null
   then
     echo "An excluded monitoring service checked: $targetdomain"
     if [ "$MONITORING_LOGS" = "TRUE" ]
     then
-      python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "MonitoringRProxyIPs" "$measurementtime" "$asndb" "$statuscode" "$useragent"
+      python /home/appuser/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "MonitoringRProxyIPs" "$measurementtime" "$asndb" "$statuscode" "$useragent"
     fi
   else      
-    python /root/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "ReverseProxyConnections" "$measurementtime" "$asndb" "$statuscode" "$useragent"
+    python /home/appuser/.config/NPMGRAF/Getipinfo.py "$outsideip" "$targetdomain" "$length" "ReverseProxyConnections" "$measurementtime" "$asndb" "$statuscode" "$useragent"
   fi
 done
 }
