@@ -3,6 +3,10 @@ NginxProxyManager Grafana Statistics.
 
 This project analyzes the logs of the Nginx Proxy Manager and exports them to InfluxDB to be used in a Grafana Dashboard. npmGrafStats can save the Revers-Proxy and/or the Redirection Logs. Also a exclusion of IP's from for example external montitoring services is possible. 
 
+[![current version](https://img.shields.io/docker/v/smilebasti/npmgrafstats/latest)](https://hub.docker.com/r/smilebasti/npmgrafstats)
+[![docker image size](https://img.shields.io/docker/image-size/smilebasti/npmgrafstats/latest)](https://hub.docker.com/r/smilebasti/npmgrafstats)
+[![docker pulls](https://img.shields.io/docker/pulls/smilebasti/npmgrafstats?color=%23099cec)](https://hub.docker.com/r/smilebasti/npmgrafstats)
+
 ### npmPlus
 If you are using npmPlus have a look at the branch: [npmPlus-main](https://github.com/smilebasti/npmGrafStats/tree/npmPlus-main)
 
@@ -23,7 +27,7 @@ A view of the Grafana Dashboard only within a few hours of running:
 ![npmGrafStats](https://user-images.githubusercontent.com/60941345/203383131-50b7197e-2e58-4bb1-a7e6-d92e15d3430a.png)
 
 ## Newest features
-v3.1.0 adds Browser and OS to the Dashboard. Also Fixes Grafana ID: With Filter 18826 and No Filter 24693
+v4.0.0 complete rewrite from shell scripts to a single threaded Python process. Massively reduces CPU and RAM usage especially with many log files. AbuseIPDB cache now uses SQLite (no more corruption). No breaking changes to ENV vars, volumes or Grafana dashboards.
 
 This project is a modified clone of  https://github.com/Festeazy/nginxproxymanagerGraf and independent of https://github.com/jc21/nginx-proxy-manager. Changes to the original project can be found in the [changelog.md](https://github.com/smilebasti/npmGrafStats/blob/main/changelog.md) file.
 
