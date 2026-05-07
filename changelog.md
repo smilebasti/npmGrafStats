@@ -2,7 +2,23 @@
 
 ### Not planned features
 - analyse fallback/default/error logs
-- grafan 10.1 missle map (route feature only one and not multiple possible)
+- grafana 10.1 missle map (route feature only one and not multiple possible)
+
+## v4.0.0
+- complete rewrite from shell scripts to Python with threading
+- 1 thread per logfile, persistent GeoIP readers + InfluxDB connection
+- SQLite WAL-mode cache for AbuseIPDB (replaces JSON, auto-migration)
+- compiled regex replaces grep/awk/cut subprocess chains
+- structured logging with Python logging module
+- graceful shutdown on SIGTERM/SIGINT
+- smaller Docker image (no bash, grepcidr, curl, gcc needed)
+- add LOG_LEVEL env var (default: INFO, supports DEBUG/WARNING/ERROR)
+- add VERBOSE_LOGGING env var (default: FALSE, logs every request like the original)
+- no breaking changes to ENV vars, volumes, measurements, tags, fields or Grafana dashboards
+
+## v3.1.2
+- update Readme
+- move maintainer lable to published image
 
 ## v3.1.1
 - add major docker tag to avoid breacking change (ex. v3-arm)
@@ -112,4 +128,3 @@ To the Original Project following changes were made:
 - exclude external Ip
 - add apk grep for --line-buffered as not included in bash in busybox -> overflow -> process stopped
 - upgrade to influx 2 - see project https://github.com/evijayan2/nginxproxymanagerGraf
-

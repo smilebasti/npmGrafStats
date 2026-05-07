@@ -36,7 +36,8 @@ services:
       - ./mysql:/var/lib/mysql
 
   npmgraf:
-    image: smilebasti/npmgrafstats:latest # change to ghcr.io/smilebasti/npmgrafstats if you prefer Github Container Registry
+    image: smilebasti/npmgrafstats:latest 
+    # image: ghcr.io/smilebasti/npmgrafstats:latest # if you prefer Github Container Registry
     restart: unless-stopped
     environment:
       REDIRECTION_LOGS: '<set TRUE or FALSE or ONLY>' # TRUE or FALSE or ONLY
@@ -47,6 +48,8 @@ services:
       INFLUX_ORG: 'npmgrafstats'
       INFLUX_TOKEN: '' # REQUIRED: insert or add to ./npmgraf_data/influxdb-token.txt after manual Influxdb bucket token creation
       # ABUSEIP_KEY: '<YOUR_ABUSEIPDB_API_KEY_HERE>' # optional: insert or add to ./npmgraf_data/abuseipdb-key.txt
+      # LOG_LEVEL: 'DEBUG'            # optional: DEBUG, INFO (default), WARNING, ERROR
+      # VERBOSE_LOGGING: 'TRUE'     # optional: log every request like the original shell scripts
     volumes:
       - ./data/logs:/logs
       - ./geolite:/geolite
@@ -56,7 +59,7 @@ services:
       - npm
 
   influxdb:
-    image: influxdb:2.7-alpine
+    image: influxdb:2.9-alpine
     restart: unless-stopped
     environment:
       DOCKER_INFLUXDB_INIT_MODE: 'setup'
