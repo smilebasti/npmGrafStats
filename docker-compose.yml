@@ -12,7 +12,8 @@ services:
       # for more see https://github.com/ZoeyVid/NPMplus/blob/develop/compose.yaml
 
   npmgraf:
-    image: smilebasti/npmgrafstats:plus-latest # change to ghcr.io/smilebasti/npmgrafstats if you prefer Github Container Registry
+    image: smilebasti/npmgrafstats:plus-latest 
+    # image: ghcr.io/smilebasti/npmgrafstats:plus-latest # if you prefer Github Container Registry
     restart: unless-stopped
     environment:
       INTERNAL_LOGS: '<set TRUE or FALSE>' # see Github wiki for more information
@@ -22,6 +23,10 @@ services:
       INFLUX_ORG: 'npmgrafstats'
       INFLUX_TOKEN: '' # REQUIRED: insert or add to ./npmgraf_data/influxdb-token.txt after manual Influxdb bucket token creation
       # ABUSEIP_KEY: '<YOUR_ABUSEIPDB_API_KEY_HERE>' # optional: insert or add to ./npmgraf_data/abuseipdb-key.txt
+      # LOG_LEVEL: 'DEBUG'        # optional: DEBUG, INFO (default), WARNING, ERROR
+      # VERBOSE_LOGGING: 'TRUE'   # optional: log every processed request
+      # NPMplus combines proxy and redirection requests in a single access.log,
+      # so REDIRECTION_LOGS no longer applies and is ignored.
     volumes:
       - /opt/npmplus/nginx:/nginx
       - ./geolite:/geolite
@@ -31,7 +36,7 @@ services:
       - npmplus
 
   influxdb:
-    image: influxdb:2.7-alpine
+    image: influxdb:2.8-alpine
     restart: unless-stopped
     environment:
       DOCKER_INFLUXDB_INIT_MODE: 'setup'
