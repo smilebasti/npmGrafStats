@@ -1,3 +1,4 @@
 geoip2
 influxdb-client
 ua-parser
+requests

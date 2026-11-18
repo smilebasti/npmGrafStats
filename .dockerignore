@@ -6,3 +6,6 @@
 
 #Ignore Map
 *.json
+
+#Ignore wiki sources
+docs/

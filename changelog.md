@@ -4,6 +4,37 @@
 - analyse fallback/default/error logs
 - grafana 10.1 missle map (route feature only one and not multiple possible)
 
+## plus-v4.1.0
+- add `ABUSEIP_CACHE_TTL_HOURS` env var to set the AbuseIPDB cache time in hours (default: 48, unchanged)
+- AbuseIPDB: on rate limit (HTTP 429) pause lookups until the limit resets instead of calling the API (and logging a warning) for every request
+- AbuseIPDB: expired cache entries are now purged hourly, not only on container start
+- log files of newly created hosts are picked up within 60s without a container restart (read from their first line)
+- version in the startup log now comes from the git tag
+- remove Portainer from the docker-compose.yml example (not needed for npmGrafStats)
+
+## plus-v4.0.0
+- released as plus-v4.0.0-rc1 only, first final v4 release is plus-v4.1.0
+- complete rewrite from shell scripts to Python with threading
+- 1 thread per logfile, persistent GeoIP readers + InfluxDB connection
+- SQLite WAL-mode cache for AbuseIPDB (replaces JSON, auto-migration)
+- compiled regex replaces grep/awk/cut subprocess chains
+- structured logging with Python logging module
+- graceful shutdown on SIGTERM/SIGINT
+- smaller Docker image (no bash, grepcidr, curl, gcc needed)
+- add LOG_LEVEL env var (default: INFO, supports DEBUG/WARNING/ERROR)
+- add VERBOSE_LOGGING env var (default: FALSE, logs every request like the original)
+
+- skip NPMplus internal healthcheck lines (UA `NPMplus/healthcheck`)
+- 127.0.0.0/8 loopback now classified as internal alongside RFC1918 / link-local / ULA
+- no upstream/target IP in NPMplus logs: `Target` tag/field is now written as `-`
+- handle copytruncate-style log rotation (detect file truncation, re-read from offset 0)
+- run container as root by default: NPMplus stores `/data/logs` as `drwx------ root` so non-root users could not even traverse the directory
+- log_watcher now warns every 60s when the log path is missing or unreadable instead of looping silently
+
+## plus-v3.1.2
+- update Readme
+- move maintainer lable to published image
+
 ## plus-v3.1.1
 - add major docker tag to avoid breacking change (ex. v3-arm)
 - cleanup ci build process and avoid seperate Docker-Arm File
@@ -121,4 +152,3 @@ To the Original Project following changes were made:
 - exclude external Ip
 - add apk grep for --line-buffered as not included in bash in busybox -> overflow -> process stopped
 - upgrade to influx 2 - see project https://github.com/evijayan2/nginxproxymanagerGraf
-
