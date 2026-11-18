@@ -1,7 +1,8 @@
 """Centralized configuration loaded from environment variables and files."""
 
-import os
 import logging
+import math
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ INFLUX_TOKEN_FILE = os.path.join(DATA_DIR, "influxdb-token.txt")
 ABUSEIP_KEY_FILE = os.path.join(DATA_DIR, "abuseipdb-key.txt")
 ABUSEIP_CACHE_DB = os.path.join(DATA_DIR, "abuseip_cache.db")
 ABUSEIP_CACHE_JSON = os.path.join(DATA_DIR, "abuseip_cache.json")
-CACHE_TTL_HOURS = 48
+DEFAULT_CACHE_TTL_HOURS = 48
 
 
 def _read_file_stripped(path: str) -> str | None:
@@ -48,6 +49,7 @@ def load_config() -> dict:
 
     # AbuseIPDB
     cfg["abuseip_key"] = os.getenv("ABUSEIP_KEY") or _read_file_stripped(ABUSEIP_KEY_FILE)
+    cfg["abuseip_cache_ttl_hours"] = _parse_cache_ttl(os.getenv("ABUSEIP_CACHE_TTL_HOURS"))
 
     # GeoIP availability
     cfg["has_city_db"] = os.path.isfile(CITY_DB_PATH)
@@ -59,10 +61,25 @@ def load_config() -> dict:
     # External IP (best-effort)
     cfg["external_ip"] = _get_external_ip()
 
-    logger.info("Configuration loaded. redirection_logs=%s internal_logs=%s monitoring_logs=%s abuseip=%s asn_db=%s",
+    logger.info("Configuration loaded. redirection_logs=%s internal_logs=%s monitoring_logs=%s abuseip=%s abuseip_cache_ttl=%gh asn_db=%s",
                 cfg["redirection_logs"], cfg["internal_logs"], cfg["monitoring_logs"],
-                bool(cfg["abuseip_key"]), cfg["has_asn_db"])
+                bool(cfg["abuseip_key"]), cfg["abuseip_cache_ttl_hours"], cfg["has_asn_db"])
     return cfg
+
+
+def _parse_cache_ttl(raw: str | None) -> float:
+    """Parse ABUSEIP_CACHE_TTL_HOURS (hours, > 0). Falls back to the default on invalid input."""
+    if raw is None or not raw.strip():
+        return DEFAULT_CACHE_TTL_HOURS
+    try:
+        hours = float(raw.strip())
+    except ValueError:
+        hours = 0
+    if not math.isfinite(hours) or hours <= 0:
+        logger.warning("Invalid ABUSEIP_CACHE_TTL_HOURS=%r (must be a number > 0), using default %dh",
+                       raw, DEFAULT_CACHE_TTL_HOURS)
+        return DEFAULT_CACHE_TTL_HOURS
+    return hours
 
 
 def _get_external_ip() -> str | None:

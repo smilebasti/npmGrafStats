@@ -12,10 +12,13 @@ class LogWatcher:
     """Watches a single log file, calling callback for each new line.
     Handles log rotation (file deleted/recreated)."""
 
-    def __init__(self, filepath: str, callback, stop_event: threading.Event):
+    def __init__(self, filepath: str, callback, stop_event: threading.Event, from_start: bool = False):
         self._filepath = filepath
         self._callback = callback
         self._stop = stop_event
+        # from_start: read the file from the beginning on first open (used for
+        # log files that appeared after startup, so their first lines are kept)
+        self._from_start = from_start
 
     def run(self):
         logger.info("Watching: %s", self._filepath)
@@ -28,14 +31,38 @@ class LogWatcher:
                     break
 
     def _tail(self):
-        # Wait for file to exist
-        while not os.path.isfile(self._filepath):
+        # Wait for file to exist AND be readable. os.path.isfile silently
+        # returns False on permission denial (common when a parent dir is
+        # mode 0700 and we run as a different uid), so we probe with os.access
+        # and log a warning every minute so the cause is obvious.
+        complaint_interval = 60
+        last_complaint = 0.0
+        while True:
+            if self._stop.is_set():
+                return
+            exists = os.path.exists(self._filepath)
+            readable = exists and os.access(self._filepath, os.R_OK)
+            if readable:
+                break
+            now = time.monotonic()
+            if now - last_complaint >= complaint_interval:
+                if not exists:
+                    logger.warning("Log file missing or unreachable: %s "
+                                   "(parent dir may be unreadable to this user)",
+                                   self._filepath)
+                else:
+                    logger.warning("Log file exists but is not readable: %s "
+                                   "(check file/directory permissions of the mounted logs volume)",
+                                   self._filepath)
+                last_complaint = now
             if self._stop.wait(1):
                 return
 
         with open(self._filepath, "r") as f:
-            # Seek to end
-            f.seek(0, 2)
+            # Seek to end (existing files) or read from start (new files)
+            if not self._from_start:
+                f.seek(0, 2)
+            self._from_start = False
             inode = os.fstat(f.fileno()).st_ino
 
             while not self._stop.is_set():
@@ -43,20 +70,25 @@ class LogWatcher:
                 if line:
                     line = line.rstrip("\n")
                     if line:
+                        logger.debug("Read line from %s: %.200s", self._filepath, line)
                         try:
                             self._callback(line)
                         except Exception as e:
                             logger.error("Callback error for %s: %s", self._filepath, e)
                 else:
-                    # No new data - check for rotation
+                    # No new data - check for rotation (rename or copytruncate)
                     try:
                         if not os.path.isfile(self._filepath):
                             logger.info("File removed, waiting for recreation: %s", self._filepath)
                             return  # Will re-enter _tail
-                        new_inode = os.stat(self._filepath).st_ino
-                        if new_inode != inode:
-                            logger.info("File rotated: %s", self._filepath)
+                        st = os.stat(self._filepath)
+                        if st.st_ino != inode:
+                            logger.info("File rotated (rename): %s", self._filepath)
                             return  # Will re-enter _tail
+                        if st.st_size < f.tell():
+                            logger.info("File truncated (copytruncate rotation): %s", self._filepath)
+                            f.seek(0)
+                            continue
                     except OSError:
                         return  # File gone, retry
 

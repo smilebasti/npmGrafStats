@@ -9,9 +9,14 @@ import time
 
 import requests
 
-from config import ABUSEIP_CACHE_DB, ABUSEIP_CACHE_JSON, CACHE_TTL_HOURS, DATA_DIR
+from config import ABUSEIP_CACHE_DB, ABUSEIP_CACHE_JSON, DEFAULT_CACHE_TTL_HOURS, DATA_DIR
 
 logger = logging.getLogger(__name__)
+
+# How often expired cache entries are purged while running (seconds)
+CLEANUP_INTERVAL = 3600
+# Pause after HTTP 429 when AbuseIPDB sends no usable reset header (seconds)
+DEFAULT_RATE_LIMIT_PAUSE = 3600
 
 _CREATE_TABLE = """
 CREATE TABLE IF NOT EXISTS abuse_cache (
@@ -25,10 +30,14 @@ CREATE TABLE IF NOT EXISTS abuse_cache (
 
 
 class AbuseChecker:
-    def __init__(self, api_key: str | None):
+    def __init__(self, api_key: str | None, cache_ttl_hours: float = DEFAULT_CACHE_TTL_HOURS):
         self._api_key = api_key
+        self._ttl_hours = cache_ttl_hours
+        self._ttl_seconds = cache_ttl_hours * 3600
         self._conn: sqlite3.Connection | None = None
         self._lock = threading.Lock()
+        self._last_cleanup = 0.0
+        self._blocked_until = 0.0
         if not api_key:
             logger.info("AbuseIPDB disabled (no API key)")
             return
@@ -67,11 +76,36 @@ class AbuseChecker:
             logger.warning("JSON cache migration failed: %s", e)
 
     def _cleanup_expired(self):
-        cutoff = time.time() - CACHE_TTL_HOURS * 3600
-        if self._conn:
-            self._conn.execute("DELETE FROM abuse_cache WHERE fetched_at < ?", (cutoff,))
+        """Delete cache entries older than the TTL. Safe to call from any thread."""
+        if not self._conn:
+            return
+        cutoff = time.time() - self._ttl_seconds
+        with self._lock:
+            cur = self._conn.execute("DELETE FROM abuse_cache WHERE fetched_at < ?", (cutoff,))
             self._conn.commit()
-            logger.info("Cleaned up expired abuse cache entries (older than %dh)", CACHE_TTL_HOURS)
+            self._last_cleanup = time.time()
+        logger.info("Cleaned up %d expired abuse cache entries (older than %gh)", cur.rowcount, self._ttl_hours)
+
+    def _maybe_cleanup(self):
+        if time.time() - self._last_cleanup >= CLEANUP_INTERVAL:
+            self._cleanup_expired()
+
+    @staticmethod
+    def _rate_limit_pause(resp: requests.Response) -> float:
+        """Seconds to wait after a 429, based on AbuseIPDB's headers."""
+        retry_after = resp.headers.get("Retry-After")
+        if retry_after:
+            try:
+                return max(float(retry_after), 1.0)
+            except ValueError:
+                pass
+        reset = resp.headers.get("X-RateLimit-Reset")
+        if reset:
+            try:
+                return max(float(reset) - time.time(), 1.0)
+            except ValueError:
+                pass
+        return DEFAULT_RATE_LIMIT_PAUSE
 
     @property
     def enabled(self) -> bool:
@@ -82,7 +116,8 @@ class AbuseChecker:
         if not self._api_key or not self._conn:
             return 0, 0
 
-        cutoff = time.time() - CACHE_TTL_HOURS * 3600
+        self._maybe_cleanup()
+        cutoff = time.time() - self._ttl_seconds
 
         with self._lock:
             row = self._conn.execute(
@@ -93,6 +128,11 @@ class AbuseChecker:
             logger.debug("AbuseIPDB cache HIT for %s", ip)
             return row[0], row[1]
 
+        # Rate limit reached earlier: don't call the API until it resets
+        if time.time() < self._blocked_until:
+            logger.debug("AbuseIPDB rate limited, skipping lookup for %s", ip)
+            return 0, 0
+
         # Cache miss - fetch from API (outside lock to avoid blocking other threads)
         logger.debug("AbuseIPDB cache MISS for %s", ip)
         try:
@@ -102,6 +142,15 @@ class AbuseChecker:
                 headers={"Accept": "application/json", "Key": self._api_key},
                 timeout=10,
             )
+            if resp.status_code == 429:
+                pause = self._rate_limit_pause(resp)
+                with self._lock:
+                    already_blocked = time.time() < self._blocked_until
+                    self._blocked_until = max(self._blocked_until, time.time() + pause)
+                if not already_blocked:
+                    logger.warning("AbuseIPDB rate limit reached, pausing lookups for %.0f min "
+                                   "(abuse scores are written as 0 meanwhile)", pause / 60)
+                return 0, 0
             resp.raise_for_status()
             api_data = resp.json().get("data", {})
             cs = api_data.get("abuseConfidenceScore", 0)

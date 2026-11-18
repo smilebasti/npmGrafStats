@@ -15,4 +15,8 @@ RUN chown -R appuser:appuser /home/appuser/app
 USER appuser
 WORKDIR /home/appuser/app
 
+# Version shown in the startup log, set by CI from the git tag
+ARG APP_VERSION=dev
+ENV APP_VERSION=${APP_VERSION}
+
 ENTRYPOINT ["python", "-u", "main.py"]

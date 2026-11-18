@@ -48,6 +48,7 @@ services:
       INFLUX_ORG: 'npmgrafstats'
       INFLUX_TOKEN: '' # REQUIRED: insert or add to ./npmgraf_data/influxdb-token.txt after manual Influxdb bucket token creation
       # ABUSEIP_KEY: '<YOUR_ABUSEIPDB_API_KEY_HERE>' # optional: insert or add to ./npmgraf_data/abuseipdb-key.txt
+      # ABUSEIP_CACHE_TTL_HOURS: '48' # optional: AbuseIPDB cache time per IP in hours (default 48)
       # LOG_LEVEL: 'DEBUG'            # optional: DEBUG, INFO (default), WARNING, ERROR
       # VERBOSE_LOGGING: 'TRUE'     # optional: log every request like the original shell scripts
     volumes:
@@ -83,17 +84,6 @@ services:
       GEOIPUPDATE_FREQUENCY: 24
     volumes:
       - ./geolite:/usr/share/GeoIP
-
-  portainer:
-    image: portainer/portainer-ce:latest
-    restart: always
-    ports: 
-      - '8000:8000'
-      - '9000:9000'
-      - '9443:9443'
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./portainer_data:/data 
 
   grafana:
     image: grafana/grafana-oss

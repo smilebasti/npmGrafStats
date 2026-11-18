@@ -4,6 +4,18 @@
 - analyse fallback/default/error logs
 - grafana 10.1 missle map (route feature only one and not multiple possible)
 
+## v4.1.0
+- add `ABUSEIP_CACHE_TTL_HOURS` env var to set the AbuseIPDB cache time in hours (default: 48, unchanged)
+- AbuseIPDB: on rate limit (HTTP 429) pause lookups until the limit resets instead of calling the API (and logging a warning) for every request
+- AbuseIPDB: expired cache entries are now purged hourly, not only on container start
+- log files of newly created hosts are picked up within 60s without a container restart (read from their first line)
+- version in the startup log now comes from the git tag
+- remove Portainer from the docker-compose.yml example (not needed for npmGrafStats)
+- wiki pages updated (source in `docs/wiki`, not part of the release): fixed `docker run` example, Grafana ID 24693 for the dashboard without filter, environment variable table, new NPMplus page; the wiki is now updated automatically on every release
+- 127.0.0.0/8 (IPv4 loopback) is now classified as internal like ::1 (from npmPlus)
+- handle copytruncate-style log rotation (detect truncation, re-read from offset 0) (from npmPlus)
+- warn every 60s when a log file is missing or unreadable instead of waiting silently (from npmPlus)
+
 ## v4.0.0
 - complete rewrite from shell scripts to Python with threading
 - 1 thread per logfile, persistent GeoIP readers + InfluxDB connection
